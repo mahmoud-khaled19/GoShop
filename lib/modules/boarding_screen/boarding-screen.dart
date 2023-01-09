@@ -1,7 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:shop_app/moduels/login%20screen/shop_login.dart';
 import 'package:shop_app/shared/components/components.dart';
+import 'package:shop_app/shared/network/local/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+
+import '../login screen/shop_login.dart';
 
 class ShopAppBoardingScreen extends StatefulWidget {
   const ShopAppBoardingScreen({Key? key}) : super(key: key);
@@ -18,7 +21,14 @@ class _ShopAppBoardingScreenState extends State<ShopAppBoardingScreen> {
     BoardingList('Third Screen', 'Third Body', 'assets/img.png'),
   ];
   bool isLast = false;
-
+ void submit(){
+   CacheHelper.saveData(key: 'onBoarding', value: true).then((value) {
+        navigateAndFinish(context, const ShopAppLoginScreen());
+        if (kDebugMode) {
+          print('onBoarding saved Successfully');
+        }
+   });
+ }
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -33,20 +43,24 @@ class _ShopAppBoardingScreenState extends State<ShopAppBoardingScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              TextButton(
-                  onPressed: () {
-                    navigateTo(context, const ShopAppLogin());
-                  },
-                  child: const Text('Skip')),
+             Row(
+               children: [
+                 Text('SHOP NAME',style: Theme.of(context).textTheme.headline5?.copyWith(
+                   color: Colors.blue,fontWeight: FontWeight.w700
+                 )),
+                 const Spacer(),
+                 defaultTextButton(
+                     function: submit, text: 'Skip'),
+               ],
+             ),
               Expanded(
                 child: PageView.builder(
-                  onPageChanged:(value) {
-                  if(value==modelList.length-1){
-                    isLast=true;
-                  }
-                  else{
-                    isLast=false;
-                  }
+                  onPageChanged: (value) {
+                    if (value == modelList.length - 1) {
+                      isLast = true;
+                    } else {
+                      isLast = false;
+                    }
                   },
                   physics: const BouncingScrollPhysics(),
                   itemBuilder: (context, index) =>
@@ -68,11 +82,9 @@ class _ShopAppBoardingScreenState extends State<ShopAppBoardingScreen> {
                   const Spacer(),
                   FloatingActionButton(
                     onPressed: () {
-
-                      if(isLast){
-                        navigateAndFinish(context, ShopAppLogin());
-                      }
-                      else{
+                      if (isLast) {
+                        submit();
+                      } else {
                         boardingController.nextPage(
                             duration: const Duration(milliseconds: 2000),
                             curve: Curves.fastLinearToSlowEaseIn);
