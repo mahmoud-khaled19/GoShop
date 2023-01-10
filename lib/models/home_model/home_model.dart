@@ -34,11 +34,14 @@ class ProductsModel{
   late dynamic oldPrice ;
   late dynamic discount ;
   late String name ;
+  late String description ;
   late String image ;
   late bool favorite ;
   late bool inCart ;
   ProductsModel.fromJson(Map json){
     id =json['id'];
+    name =json['name'];
+    description =json['description'];
     price =json['price'];
     oldPrice =json['old_price'];
     discount =json['discount'];
