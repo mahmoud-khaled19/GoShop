@@ -9,7 +9,6 @@ import '../../shared/cubit/app_cubit.dart';
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({Key? key}) : super(key: key);
 
-
   @override
   Widget build(BuildContext context) {
     var formKey = GlobalKey<FormState>();
@@ -17,10 +16,10 @@ class RegisterScreen extends StatelessWidget {
     var passController = TextEditingController();
     var phoneController = TextEditingController();
     var emailController = TextEditingController();
-    return BlocConsumer<ShopCubit,ShopStates>(
-      listener: (context,state){},
-      builder: (context,state){
-        return  Scaffold(
+    return BlocConsumer<ShopCubit, ShopStates>(
+      listener: (context, state) {},
+      builder: (context, state) {
+        return Scaffold(
           appBar: AppBar(),
           body: Padding(
             padding: const EdgeInsets.all(20.0),
@@ -98,7 +97,7 @@ class RegisterScreen extends StatelessWidget {
                           }
                         },
                         type: TextInputType.phone,
-                        isSecure:true,
+                        isSecure: true,
                         controller: passController,
                         prefix: Icons.lock,
                         // suffix: AppCubit.get(context).isVisible == false
@@ -116,7 +115,6 @@ class RegisterScreen extends StatelessWidget {
                         function: () {
                           if (formKey.currentState!.validate()) {
                             navigateTo(context, const ShopAppLoginScreen());
-
                           }
                         }),
                     const SizedBox(

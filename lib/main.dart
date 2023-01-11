@@ -25,7 +25,7 @@ void main() async {
   }
   Widget widget;
   if (onBoarding != null) {
-    if (token.length <= 2) {
+    if (token == null) {
       widget = const ShopAppLoginScreen();
     } else {
       widget = const ShopLayout();
@@ -37,10 +37,10 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  Widget widget;
+  final Widget widget;
   final bool? isDark;
 
-  MyApp(this.isDark, this.widget, {super.key});
+ const MyApp(this.isDark, this.widget, {super.key});
 
   // This widget is the root of your application.
   @override
@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
     return BlocProvider(
         create: (BuildContext context) => ShopCubit()
           ..changeShopTheme(fromShared: isDark)
-          ..homeModel(),
+          ..homeModel()..categoryModel(),
         child: BlocConsumer<ShopCubit, ShopStates>(
           listener: (context, state) {},
           builder: (context, state) {
@@ -56,12 +56,11 @@ class MyApp extends StatelessWidget {
               debugShowCheckedModeBanner: false,
               theme: lightMode,
               darkTheme: darkMode,
-              themeMode: ShopCubit.get(context).isDark
-                  ? ThemeMode.dark
-                  : ThemeMode.light,
+              themeMode: ThemeMode.light,
               home: widget,
             );
           },
         ));
+
   }
 }

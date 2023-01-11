@@ -5,6 +5,7 @@ import 'package:shop_app/models/home_model/home_model.dart';
 import 'package:shop_app/shared/network/local/shared_preferences.dart';
 import 'package:shop_app/shared/network/remote/dio.dart';
 
+import '../../models/category_model/category_model.dart';
 import '../../modules/categories/categories.dart';
 import '../../modules/favorite/favorites.dart';
 import '../../modules/products/products.dart';
@@ -15,7 +16,8 @@ import 'app_states.dart';
 
 class ShopCubit extends Cubit<ShopStates> {
   ShopCubit() : super(ShopInitialState());
-  late HomeModelData model;
+  HomeModelData? model;
+  late CategoryModel catModel;
 
   static ShopCubit get(context) => BlocProvider.of(context);
   bool isDark = false;
@@ -47,17 +49,32 @@ class ShopCubit extends Cubit<ShopStates> {
   void homeModel() {
     emit(ShopHomeLoadingState());
     DioHelper.getData(url: home, token: token).then((value) {
-      emit(ShopHomeSuccessState());
       model = HomeModelData.fromJson(value.data);
-      if (kDebugMode) {
-        print(model.status);
-      }
-      if (kDebugMode) {
-        print(model.data.banners[0].image);
-      }
-
+      emit(ShopHomeSuccessState());
     }).catchError((error) {
       emit(ShopHomeErrorState());
+      if (kDebugMode) {
+        print(error.toString());
+      }
+    });
+  }
+  void categoryModel() {
+    emit(ShopCategoryLoadingState());
+    DioHelper.getData(url: category).then((value) {
+      catModel = CategoryModel.fromJson(value.data);
+      if (kDebugMode) {
+        print(catModel.status);
+      }
+      if (kDebugMode) {
+        print('Category came SuccessFully');
+      }
+      if (kDebugMode) {
+        print(catModel.data.currentPage);
+      }
+      emit(ShopCategorySuccessState());
+
+    }).catchError((error) {
+      emit(ShopCategoryErrorState());
       if (kDebugMode) {
         print(error.toString());
       }

@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
-class ProductDetails extends StatelessWidget {
- late String image;
- late dynamic price;
- late String name;
- late String description;
- ProductDetails({required this.image,required this.name,
+ class ProductDetails extends StatelessWidget {
+  final String image;
+  final dynamic price;
+  final String name;
+  final String description;
+ const ProductDetails({required this.image,required this.name,
    required this.price,required this.description,super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Center(child:  Text('Product Details')),
+        title: const Center(child:  Text('')),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -33,7 +33,6 @@ class ProductDetails extends StatelessWidget {
                 height: 20,
               ),
               Text(description),
-
             ],
           ),
         ),

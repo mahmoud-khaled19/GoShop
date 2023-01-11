@@ -16,7 +16,7 @@ class ShopLayout extends StatelessWidget {
         ShopCubit cubit = BlocProvider.of(context);
         return Scaffold(
           appBar: AppBar(
-            title:const Text('Shop Layout'),
+            title:const Text('KOoOTa SHOP'),
             actions: [
               IconButton(icon:const Icon(Icons.search), onPressed: () {
                 navigateTo(context, const SearchScreen());
@@ -35,7 +35,7 @@ class ShopLayout extends StatelessWidget {
               BottomNavigationBarItem(
                   icon: Icon(Icons.home), label: 'Products'),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.apps), label: 'Products'),
+                  icon: Icon(Icons.apps), label: 'Categories'),
               BottomNavigationBarItem(
                   icon: Icon(Icons.favorite), label: 'Favourites'),
               BottomNavigationBarItem(

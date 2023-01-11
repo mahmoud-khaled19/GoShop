@@ -45,7 +45,7 @@ class _ShopAppBoardingScreenState extends State<ShopAppBoardingScreen> {
             children: [
              Row(
                children: [
-                 Text('SHOP NAME',style: Theme.of(context).textTheme.headline5?.copyWith(
+                 Text('KOoOTa SHOP',style: Theme.of(context).textTheme.headline5?.copyWith(
                    color: Colors.blue,fontWeight: FontWeight.w700
                  )),
                  const Spacer(),

@@ -7,4 +7,4 @@ void signOut(context){
     navigateAndFinish(context, const ShopAppLoginScreen());
   });
 }
- String token ='' ;
+ String? token ;

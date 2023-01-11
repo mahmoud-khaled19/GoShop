@@ -25,8 +25,6 @@ ThemeData lightMode = ThemeData(
     ),
     scaffoldBackgroundColor: Colors.white,
     appBarTheme: AppBarTheme(
-
-        titleSpacing: 20,
         iconTheme: IconThemeData(color: lightPrimaryColor, size: 25),
         systemOverlayStyle: const SystemUiOverlayStyle(
             statusBarColor: Colors.white,
@@ -35,8 +33,8 @@ ThemeData lightMode = ThemeData(
         elevation: 0,
         titleTextStyle: TextStyle(
             color: lightPrimaryColor,
-            fontSize: 22,
-            fontWeight: FontWeight.w900)),
+            fontSize: 18,
+            fontWeight: FontWeight.bold)),
     primarySwatch: Colors.blue);
 ThemeData darkMode = ThemeData(
     drawerTheme: DrawerThemeData(

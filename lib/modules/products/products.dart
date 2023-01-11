@@ -20,8 +20,8 @@ class ProductsScreen extends StatelessWidget {
       builder: (context, state) {
         ShopCubit cubit = BlocProvider.of(context);
         return ConditionalBuilder(
-            condition: state is! ShopHomeLoadingState,
-            builder: (context) => productsBuilder(cubit.model,context),
+            condition: cubit.model != null,
+            builder: (context) => productsBuilder(cubit.model!, context),
             fallback: (context) => const Center(
                   child: CircularProgressIndicator(),
                 ));
@@ -30,51 +30,70 @@ class ProductsScreen extends StatelessWidget {
   }
 }
 
-Widget productsBuilder(HomeModelData model,context) => SingleChildScrollView(
-      physics: const BouncingScrollPhysics(),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        CarouselSlider(
-            items: model.data.banners
-                .map((e) => Image(
-                      image: NetworkImage(e.image),
-                      width: double.infinity,
-                      fit: BoxFit.fill,
-                      height: 250,
-                    ))
-                .toList(),
-            options: CarouselOptions(
-                autoPlay: true,
-                viewportFraction: 1,
-                scrollDirection: Axis.horizontal,
-                autoPlayAnimationDuration: const Duration(seconds: 4),
-                autoPlayCurve: Curves.fastOutSlowIn)),
-        const SizedBox(
-          height: 10,
-        ),
-        GridView.count(
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            childAspectRatio: 1 / 1.5,
-            crossAxisSpacing: 2,
-            mainAxisSpacing: 2,
-            crossAxisCount: 2,
-            children: List.generate(
-              model.data.products.length,
-              (index) => productItem(model.data.products[index],context),
-            ))
-        //productItem(model.data.products[index])
-      ]),
+Widget productsBuilder(HomeModelData model, context) => RefreshIndicator(
+      displacement: 200,
+      onRefresh: () {
+        return refresh();
+      },
+      child: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          CarouselSlider(
+              items: model.data.banners
+                  .map((e) => Image(
+                        image: NetworkImage(e.image),
+                        width: double.infinity,
+                        fit: BoxFit.fill,
+                        height: 250,
+                      ))
+                  .toList(),
+              options: CarouselOptions(
+                  autoPlay: true,
+                  viewportFraction: 1,
+                  scrollDirection: Axis.horizontal,
+                  autoPlayAnimationDuration: const Duration(seconds: 4),
+                  autoPlayCurve: Curves.fastOutSlowIn)),
+
+          const SizedBox(
+            height: 20,
+          ),
+
+          const Padding(
+            padding: EdgeInsets.only(left: 10),
+            child: Text(
+              'New Products',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+          ),
+
+          GridView.count(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              childAspectRatio: 1 / 1.5,
+              crossAxisSpacing: 2,
+              mainAxisSpacing: 2,
+              crossAxisCount: 2,
+              children: List.generate(
+                model.data.products.length,
+                (index) => productItem(model.data.products[index], context),
+              ))
+
+          //productItem(model.data.products[index])
+        ]),
+      ),
     );
 
 Widget productItem(ProductsModel model, context) => InkWell(
-  onTap: (){
-    navigateTo(context, ProductDetails(
-      image: model.image,
-      price: 'Price : ${model.price.round()}',
-      description: model.description,
-      name: model.name,
-    ));
-  },
+      onTap: () {
+        navigateTo(
+            context,
+            ProductDetails(
+              image: model.image,
+              price: 'Price : ${model.price.round()}',
+              description: model.description,
+              name: model.name,
+            ));
+      },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -134,3 +153,7 @@ Widget productItem(ProductsModel model, context) => InkWell(
         ],
       ),
     );
+
+Future<void> refresh() {
+  return Future.delayed(const Duration(seconds: 10));
+}
