@@ -11,13 +11,14 @@ class CategoriesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     ShopCubit cubit = BlocProvider.of(context);
     return BlocConsumer<ShopCubit, ShopStates>(
       listener: (context, state) {},
       builder: (context, state) {
         return ConditionalBuilder(
-            condition: state is! ShopCategoryLoadingState,
-            builder: (context) => categoryItem(cubit.catModel),
+            condition: cubit.catModel != null,
+            builder: (context) => categoryItem(cubit.catModel!,context),
             fallback: (context) => const Center(
                   child: CircularProgressIndicator(),
                 ));
@@ -26,8 +27,8 @@ class CategoriesScreen extends StatelessWidget {
   }
 }
 
-Widget categoryItem(CategoryModel model) => RefreshIndicator(
-      displacement: 200,
+Widget categoryItem(CategoryModel model,context) => RefreshIndicator(
+      displacement: 100,
       onRefresh: () {
         return refresh();
       },
@@ -36,6 +37,7 @@ Widget categoryItem(CategoryModel model) => RefreshIndicator(
         child: ListView.builder(
           physics: const BouncingScrollPhysics(),
           itemBuilder: (BuildContext context, int index) {
+            var size =MediaQuery.of(context).size;
             return Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
@@ -44,15 +46,15 @@ Widget categoryItem(CategoryModel model) => RefreshIndicator(
               margin: const EdgeInsets.only(
                 bottom: 15,left: 20,right: 20
               ),
-              width: 220,
-              height: 220,
+              width: size.width * 0.22,
+              height: size.height * 0.3,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image(
                     image: NetworkImage(model.data.data[index].image),
-                    width: 170,
-                    height: 170,
+                    width: size.width *0.6,
+                    height: size.width *0.42,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

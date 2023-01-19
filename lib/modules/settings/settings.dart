@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shop_app/shared/components/components.dart';
-import 'package:shop_app/shared/components/constans.dart';
+import 'package:shop_app/shared/components/constants.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);

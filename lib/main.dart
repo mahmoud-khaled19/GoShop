@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_app/layout/shop_layout.dart';
 import 'package:shop_app/modules/login%20screen/shop_login.dart';
-import 'package:shop_app/shared/components/constans.dart';
+import 'package:shop_app/shared/components/constants.dart';
 import 'package:shop_app/shared/cubit/app_states.dart';
 import 'package:shop_app/shared/cubit/app_cubit.dart';
 import 'package:shop_app/shared/cubit/bloc%20observer.dart';

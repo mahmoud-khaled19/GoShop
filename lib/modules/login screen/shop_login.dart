@@ -21,16 +21,17 @@ class ShopAppLoginScreen extends StatelessWidget {
         listener: (context, state) {
           if (state is LoginSuccessState) {
             if (state.loginModel.status) {
-           CacheHelper.saveData(key: 'token', value: state.loginModel.data.token).then((value){
-             navigateAndFinish(context, const ShopLayout());
-           });
-            }
-            else {
+              CacheHelper.saveData(
+                      key: 'token', value: state.loginModel.data.token)
+                  .then((value) {
+                navigateAndFinish(context, const ShopLayout());
+              });
+            } else {
               defaultToast(text: state.loginModel.message, color: Colors.red);
             }
-          }
-          else if (state is LoginErrorState){
-            defaultToast(text: ' تأكد من الاتصال بالانترنت ', color: Colors.green);
+          } else if (state is LoginErrorState) {
+            defaultToast(
+                text: ' تأكد من الاتصال بالانترنت ', color: Colors.green);
           }
         },
         builder: (context, state) {
@@ -113,9 +114,9 @@ class ShopAppLoginScreen extends StatelessWidget {
                           height: 40,
                         ),
                         Visibility(
-                          replacement:const Center(
-                              child: CircularProgressIndicator()) ,
-                          visible:  state is! LoginLoadingState ,
+                          replacement:
+                              const Center(child: CircularProgressIndicator()),
+                          visible: state is! LoginLoadingState,
                           child: defaultElvButton(
                               text: 'Login',
                               function: () {
