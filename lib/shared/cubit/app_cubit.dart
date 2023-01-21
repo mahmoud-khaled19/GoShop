@@ -20,8 +20,8 @@ class ShopCubit extends Cubit<ShopStates> {
   ShopCubit() : super(ShopInitialState());
   HomeModelData? model;
   FavoritesModel? favModel;
-  Map<int,bool>favourites={};
-   CategoryModel? catModel;
+  Map<int, bool> favourites = {};
+  CategoryModel? catModel;
 
   static ShopCubit get(context) => BlocProvider.of(context);
   bool isDark = false;
@@ -54,7 +54,7 @@ class ShopCubit extends Cubit<ShopStates> {
     DioHelper.getData(url: home, token: token).then((value) {
       model = HomeModelData.fromJson(value.data);
       for (var element in model!.data.products) {
-        favourites.addAll({element.id:element.favorite});
+        favourites.addAll({element.id: element.favorite});
       }
       if (kDebugMode) {
         print(favourites.toString());
@@ -80,7 +80,6 @@ class ShopCubit extends Cubit<ShopStates> {
         print(catModel!.data.currentPage);
       }
       emit(ShopCategorySuccessState());
-
     }).catchError((error) {
       emit(ShopCategoryErrorState());
       if (kDebugMode) {
@@ -88,38 +87,55 @@ class ShopCubit extends Cubit<ShopStates> {
       }
     });
   }
-  void changeFavoriteState(int productId){
-    favourites[productId] =! favourites[productId]!;
-    emit(ShopFavoritesSuccessState());
+  void changeFavoriteState(int productId) {
+    favourites[productId] = !favourites[productId]!;
+    emit(ShopChangeFavoritesSuccessState());
     DioHelper.postData(
-        url: favorites,
-        data: {'product_id':productId },
-        token: token)
+            url: favorites,
+        data: {'product_id': productId},
+          token: token)
         .then((value) {
-          favModel=FavoritesModel.fromJson(value.data);
-          if(!favModel!.status){
-            favourites[productId] =! favourites[productId]!;
-          }
-          if (kDebugMode) {
-            print(favModel!.message.toString());
-          }
-          emit(ShopFavoritesSuccessState());
-    }).catchError((error){
-      if(!favModel!.status){
-        favourites[productId] =! favourites[productId]!;
+      favModel = FavoritesModel.fromJson(value.data);
+      if (favModel?.status != null) {
+        favourites[productId] != favourites[productId];
       }
-      emit(ShopFavoritesErrorState());
+        getFavoritesItems();
+      if (kDebugMode) {
+        print(favModel!.message.toString());
+      }
+      emit(ShopChangeFavoritesSuccessState());
+    }).catchError((error) {
+      if (favModel?.status != null) {
+        favourites[productId] = !favourites[productId]!;
+      }
+      emit(ShopChangeFavoritesErrorState());
     });
-      if(favModel!.status){
-        if(favourites[productId]!){
-          defaultToast(text: 'تم إضافه المنتج إلي التفضيلات', color: Colors.green);
-        }
-        else{
-          defaultToast(text: 'تم حذف المنتج من قائمة التفضيلات ', color: Colors.yellow);
-        }
+    if (favModel?.status != null) {
+      if (favourites[productId]!) {
+        defaultToast(
+            text: 'تم إضافه المنتج إلي التفضيلات', color: Colors.green);
+      } else {
+        defaultToast(
+            text: 'تم حذف المنتج من قائمة التفضيلات ', color: Colors.yellow);
       }
-      else{
-        defaultToast(text: 'غير مصرح لك يرجي تسجيل الدخول من جديد', color: Colors.red);
+    } else {
+      defaultToast(
+          text: 'غير مصرح لك يرجي تسجيل الدخول من جديد', color: Colors.red);
     }
+  }
+  void getFavoritesItems(){
+    emit(ShopFavoritesLoadingState());
+    DioHelper.getData(url: favorites,token: token).then((value) {
+      favModel = FavoritesModel.fromJson(value.data);
+      if (kDebugMode) {
+        print('the info is here ${value.data.toString()}');
+      }
+      emit(ShopFavoritesSuccessState());
+    }).catchError((error) {
+      emit(ShopFavoritesErrorState());
+      if (kDebugMode) {
+        print(error.toString());
+      }
+    });
   }
 }

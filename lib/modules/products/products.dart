@@ -1,6 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_app/models/home_model/home_model.dart';
@@ -37,9 +36,7 @@ Widget productsBuilder(HomeModelData model, context) => RefreshIndicator(
       },
       child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           CarouselSlider(
               items: model.data.banners
                   .map((e) => Image(
@@ -73,7 +70,7 @@ Widget productsBuilder(HomeModelData model, context) => RefreshIndicator(
             child: GridView.count(
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                childAspectRatio: 1 / 1.55,
+                childAspectRatio: 1 / 1.44,
                 crossAxisSpacing: 2,
                 mainAxisSpacing: 2,
                 crossAxisCount: 2,
@@ -88,9 +85,7 @@ Widget productsBuilder(HomeModelData model, context) => RefreshIndicator(
 
 Widget productItem(ProductsModel model, context) =>
     BlocConsumer<ShopCubit, ShopStates>(
-      listener: (context, state) {
-
-      },
+      listener: (context, state) {},
       builder: (context, state) {
         return Container(
           color: Colors.white,
@@ -101,6 +96,7 @@ Widget productItem(ProductsModel model, context) =>
                   context,
                   ProductDetails(
                     image: model.image,
+                    id: model.id,
                     price: 'Price : ${model.price.round()}',
                     description: model.description,
                     name: model.name,
@@ -111,72 +107,86 @@ Widget productItem(ProductsModel model, context) =>
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Stack(
-                  alignment: AlignmentDirectional.bottomStart,
+                  alignment: AlignmentDirectional.bottomEnd,
                   children: [
                     Image(
                       image: NetworkImage(model.image),
                       height: MediaQuery.of(context).size.height * 0.22,
                       width: double.infinity,
                     ),
-                    if (model.discount != 0)
-                      Container(
+                    IconButton(
+                      onPressed: () {
+                        ShopCubit.get(context).changeFavoriteState(model.id);
+                      },
+                      icon: CircleAvatar(
+                        backgroundColor: Colors.grey[200],
+                        child: Icon(
+                          ShopCubit.get(context).favourites[model.id]!
+                              ? Icons.favorite
+                              : Icons.favorite_border,
                           color: Colors.red,
-                          child: const Text(
-                            'DISCOUNT',
-                            style: TextStyle(color: Colors.white),
-                          ))
+                          size: MediaQuery.of(context).size.width * 0.06,
+                        ),
+                      ),
+                    )
                   ],
                 ),
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Column(
                     children: [
-                      Text(
-                        model.name,
-                        style:  TextStyle(fontSize: 12,
-                            height:model.name.characters.length <=20 ?
-                            MediaQuery.of(context).size.height*.0038:
-                            MediaQuery.of(context).size.height*.0019
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-
-                      ),
                       Row(
                         children: [
                           Text(
-                            'P: ${model.price.round()}',
+                            'Egp ${model.price.round()}',
                             maxLines: 1,
                             style: TextStyle(
-                                fontSize: 12, color: lightPrimaryColor),
+                                fontSize: 14, color: model.discount != 0? lightPrimaryColor:Colors.black),
                           ),
-                          const SizedBox(width: 10),
+                          const SizedBox(width: 8),
                           if (model.discount != 0)
                             Text(
                               '${model.oldPrice.round()}',
                               style: TextStyle(
-                                  fontSize: 12,
+                                  fontSize: 10,
                                   decoration: TextDecoration.lineThrough,
                                   color: Colors.grey[600]),
                             ),
-                          const Spacer(),
-                          IconButton(
-                              onPressed: () {
-                                ShopCubit.get(context).changeFavoriteState(model.id);
-                                if (kDebugMode) {
-                                  print(model.id);
-                                }
-                              },
-                              icon: CircleAvatar(
-
-                                backgroundColor: Colors.grey[300],
-                                child: Icon(
-                                    ShopCubit.get(context).favourites[model.id]!
-                                        ? Icons.favorite
-                                        : Icons.favorite_border,
-                                    color: Colors.red,size: MediaQuery.of(context).size.width * 0.06,),
-                              ),)
+                          // const Spacer(),
+                          // IconButton(
+                          //   onPressed: () {
+                          //     ShopCubit.get(context)
+                          //         .changeFavoriteState(model.id);
+                          //     if (kDebugMode) {
+                          //       print(model.id);
+                          //     }
+                          //   },
+                          //   icon: CircleAvatar(
+                          //     backgroundColor: Colors.grey[300],
+                          //     child: Icon(
+                          //       ShopCubit.get(context).favourites[model.id]!
+                          //           ? Icons.favorite
+                          //           : Icons.favorite_border,
+                          //       color: Colors.red,
+                          //       size: MediaQuery.of(context).size.width * 0.06,
+                          //     ),
+                          //   ),
+                          // )
                         ],
+                      ),
+                      const SizedBox(
+                        height: 7,
+                      ),
+                      Text(
+                        model.name,
+                        style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.black45,
+                            height: model.name.characters.length <= 20
+                                ? MediaQuery.of(context).size.height * .0038
+                                : MediaQuery.of(context).size.height * .0019),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ],
                   ),

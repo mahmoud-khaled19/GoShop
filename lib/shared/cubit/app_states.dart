@@ -7,5 +7,8 @@ abstract class ShopStates{}
  class ShopHomeErrorState extends ShopStates{}
 class ShopCategorySuccessState extends ShopStates{}
 class ShopCategoryErrorState extends ShopStates{}
+class ShopChangeFavoritesSuccessState extends ShopStates{}
+class ShopChangeFavoritesErrorState extends ShopStates{}
 class ShopFavoritesSuccessState extends ShopStates{}
+class ShopFavoritesLoadingState extends ShopStates{}
 class ShopFavoritesErrorState extends ShopStates{}

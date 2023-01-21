@@ -40,15 +40,16 @@ class MyApp extends StatelessWidget {
   final Widget widget;
   final bool? isDark;
 
- const MyApp(this.isDark, this.widget, {super.key});
+  const MyApp(this.isDark, this.widget, {super.key});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (BuildContext context) => ShopCubit()
+        create: (BuildContext context) => ShopCubit()..getFavoritesItems()
           ..changeShopTheme(fromShared: isDark)
-          ..homeModel()..categoryModel(),
+          ..homeModel()
+          ..categoryModel(),
         child: BlocConsumer<ShopCubit, ShopStates>(
           listener: (context, state) {},
           builder: (context, state) {
@@ -61,6 +62,5 @@ class MyApp extends StatelessWidget {
             );
           },
         ));
-
   }
 }

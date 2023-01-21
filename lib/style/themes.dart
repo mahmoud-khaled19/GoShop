@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:shop_app/style/colors.dart';
 
 ThemeData lightMode = ThemeData(
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
         type: BottomNavigationBarType.fixed,
-        backgroundColor: Colors.white,
+        backgroundColor: HexColor('#F2F3F4'),
         elevation: 0,
         showUnselectedLabels: false,
-        selectedItemColor: lightPrimaryColor,
+        selectedItemColor: Colors.black,
+        unselectedIconTheme: const IconThemeData(
+          size: 18
+        ),
         unselectedItemColor: Colors.grey[600],
         selectedLabelStyle:
             const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
@@ -24,18 +28,19 @@ ThemeData lightMode = ThemeData(
       ),
     ),
     scaffoldBackgroundColor: Colors.white,
-    appBarTheme: AppBarTheme(
-        iconTheme: IconThemeData(color: lightPrimaryColor, size: 25),
-        systemOverlayStyle: const SystemUiOverlayStyle(
+    appBarTheme:const AppBarTheme(
+        iconTheme:  IconThemeData(color: Colors.black, size: 25),
+        systemOverlayStyle:  SystemUiOverlayStyle(
             statusBarColor: Colors.white,
             statusBarIconBrightness: Brightness.dark),
         backgroundColor: Colors.white,
         elevation: 0,
         titleTextStyle: TextStyle(
-            color: lightPrimaryColor,
+            color: Colors.black,
             fontSize: 18,
             fontWeight: FontWeight.bold)),
-    primarySwatch: Colors.blue);
+
+    );
 ThemeData darkMode = ThemeData(
     drawerTheme: DrawerThemeData(
       backgroundColor: darkPrimaryColor,

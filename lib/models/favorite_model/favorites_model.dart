@@ -1,8 +1,54 @@
-class FavoritesModel{
-  late final bool status ;
-  late final String message ;
-  FavoritesModel.fromJson(Map<String,dynamic>json){
-    status =json['status'];
+class FavoritesModel {
+  bool? status;
+  FavData? data;
+  String? message;
+
+  FavoritesModel.fromJson(Map<String, dynamic> json) {
+    status = json['status'];
     message =json['message'];
+    data = json['data'] != null ?  FavData.fromJson(json['data']) : null;
   }
+}
+
+class FavData {
+  int? currentPage;
+  List<DataModel> data=[];
+  FavData.fromJson(Map<String, dynamic> json) {
+    currentPage = json['current_page'];
+    if (json['data'] != null) {
+      json['data'].forEach((v) {
+        data.add(DataModel.fromJson(v));
+      });
+    }
+  }
+}
+
+class DataModel {
+  int? id;
+  ProductItem? product;
+
+  DataModel.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    product = json['product'] != null ? ProductItem.fromJson(json['product']) : null;
+  }
+}
+
+class ProductItem {
+  late int id;
+  late dynamic price;
+  late dynamic oldPrice;
+  late dynamic discount;
+  late String image;
+  late String name;
+  late String description;
+  ProductItem.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    price = json['price'];
+    oldPrice = json['old_price'];
+    discount = json['discount'];
+    image = json['image'];
+    name = json['name'];
+    description = json['description'];
+  }
+
 }
