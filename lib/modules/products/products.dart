@@ -38,9 +38,9 @@ Widget productsBuilder(HomeModelData model, context) => RefreshIndicator(
         physics: const BouncingScrollPhysics(),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           CarouselSlider(
-              items: model.data.banners
+              items: model.data!.banners
                   .map((e) => Image(
-                        image: NetworkImage(e.image),
+                        image: NetworkImage(e.image!),
                         width: double.infinity,
                         fit: BoxFit.fill,
                         height: MediaQuery.of(context).size.height * 0.25,
@@ -75,8 +75,8 @@ Widget productsBuilder(HomeModelData model, context) => RefreshIndicator(
                 mainAxisSpacing: 2,
                 crossAxisCount: 2,
                 children: List.generate(
-                  model.data.products.length,
-                  (index) => productItem(model.data.products[index], context),
+                  model.data!.products.length,
+                  (index) => productItem(model.data!.products[index], context),
                 )),
           )
         ]),
@@ -95,11 +95,11 @@ Widget productItem(ProductsModel model, context) =>
               navigateTo(
                   context,
                   ProductDetails(
-                    image: model.image,
+                    image: model.image!,
                     id: model.id,
                     price: 'Price : ${model.price.round()}',
-                    description: model.description,
-                    name: model.name,
+                    description: model.description!,
+                    name: model.name!,
                   ));
             },
             child: Column(
@@ -107,28 +107,45 @@ Widget productItem(ProductsModel model, context) =>
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Stack(
-                  alignment: AlignmentDirectional.bottomEnd,
+                  alignment: AlignmentDirectional.topStart,
                   children: [
-                    Image(
-                      image: NetworkImage(model.image),
-                      height: MediaQuery.of(context).size.height * 0.22,
-                      width: double.infinity,
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        ShopCubit.get(context).changeFavoriteState(model.id);
-                      },
-                      icon: CircleAvatar(
-                        backgroundColor: Colors.grey[200],
-                        child: Icon(
-                          ShopCubit.get(context).favourites[model.id]!
-                              ? Icons.favorite
-                              : Icons.favorite_border,
-                          color: Colors.red,
-                          size: MediaQuery.of(context).size.width * 0.06,
+                    Stack(
+                      alignment: AlignmentDirectional.bottomEnd,
+                      children: [
+                        Image(
+                          image: NetworkImage(model.image!),
+                          height: MediaQuery.of(context).size.height * 0.22,
+                          width: double.infinity,
                         ),
-                      ),
-                    )
+                        IconButton(
+                          onPressed: () {
+                            ShopCubit.get(context).changeFavoriteState(model.id!);
+                          },
+                          icon: CircleAvatar(
+                            backgroundColor: Colors.grey[200],
+                            child: Icon(
+                              ShopCubit.get(context).favourites[model.id]!
+                                  ? Icons.favorite
+                                  : Icons.favorite_border,
+                              color: Colors.red,
+                              size: MediaQuery.of(context).size.width * 0.06,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                    if(model.discount != 0)
+                      Container(
+                        decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(10)
+                        ),
+
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: const Text('Discount',style: TextStyle(
+                            color: Colors.white
+                        ),),
+                      )
                   ],
                 ),
                 Padding(
@@ -178,11 +195,11 @@ Widget productItem(ProductsModel model, context) =>
                         height: 7,
                       ),
                       Text(
-                        model.name,
+                        model.name!,
                         style: TextStyle(
                             fontSize: 12,
                             color: Colors.black45,
-                            height: model.name.characters.length <= 20
+                            height: model.name!.characters.length <= 20
                                 ? MediaQuery.of(context).size.height * .0038
                                 : MediaQuery.of(context).size.height * .0019),
                         maxLines: 2,

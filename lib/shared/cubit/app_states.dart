@@ -12,3 +12,7 @@ class ShopChangeFavoritesErrorState extends ShopStates{}
 class ShopFavoritesSuccessState extends ShopStates{}
 class ShopFavoritesLoadingState extends ShopStates{}
 class ShopFavoritesErrorState extends ShopStates{}
+class ShopUserDataSuccessState extends ShopStates{}
+class ShopUserDataLoadingState extends ShopStates{}
+class ShopUserDataErrorState extends ShopStates{}
+class UserImageChange extends ShopStates{}

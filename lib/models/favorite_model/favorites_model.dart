@@ -34,13 +34,13 @@ class DataModel {
 }
 
 class ProductItem {
-  late int id;
-  late dynamic price;
-  late dynamic oldPrice;
-  late dynamic discount;
-  late String image;
-  late String name;
-  late String description;
+   int? id;
+   dynamic price;
+   dynamic oldPrice;
+   dynamic discount;
+   String? image;
+   String? name;
+   String? description;
   ProductItem.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     price = json['price'];

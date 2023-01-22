@@ -19,6 +19,7 @@ void main() async {
   await CacheHelper.init();
   bool? onBoarding = CacheHelper.getData(key: 'onBoarding');
   bool? isDark = CacheHelper.getData(key: 'isDark');
+  String? getPic = CacheHelper.getData(key: 'pic');
   token = CacheHelper.getData(key: 'token');
   if (kDebugMode) {
     print(token);
@@ -33,23 +34,25 @@ void main() async {
   } else {
     widget = const ShopAppBoardingScreen();
   }
-  runApp(MyApp(isDark, widget));
+  runApp(MyApp(isDark,getPic, widget));
 }
 
 class MyApp extends StatelessWidget {
   final Widget widget;
   final bool? isDark;
+  final String? getPic;
 
-  const MyApp(this.isDark, this.widget, {super.key});
+  const MyApp(
+      this.isDark,
+      this.getPic,
+      this.widget, {super.key});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (BuildContext context) => ShopCubit()..getFavoritesItems()
-          ..changeShopTheme(fromShared: isDark)
-          ..homeModel()
-          ..categoryModel(),
+        create: (BuildContext context) => ShopCubit()..homeModel()
+          ..categoryModel()..getFavoritesItems()..getUserdata(),
         child: BlocConsumer<ShopCubit, ShopStates>(
           listener: (context, state) {},
           builder: (context, state) {

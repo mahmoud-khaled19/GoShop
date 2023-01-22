@@ -49,9 +49,10 @@ Widget defaultTextButton({
 Widget defaultElvButton({
   required String text,
   required Function() function,
+  double width =double.infinity,
 }) =>
     Container(
-      width: double.infinity,
+      width: width,
       decoration: const BoxDecoration(
         color: Colors.blue,
         borderRadius: BorderRadius.only(topRight: Radius.circular(20),bottomLeft:  Radius.circular(20))

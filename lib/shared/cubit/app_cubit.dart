@@ -1,12 +1,16 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shop_app/models/favorite_model/favorites_model.dart';
 import 'package:shop_app/models/home_model/home_model.dart';
 import 'package:shop_app/shared/network/local/shared_preferences.dart';
 import 'package:shop_app/shared/network/remote/dio.dart';
 
 import '../../models/category_model/category_model.dart';
+import '../../models/shop_model/shop_model.dart';
 import '../../modules/categories/categories.dart';
 import '../../modules/favorite/favorites.dart';
 import '../../modules/products/products.dart';
@@ -19,6 +23,7 @@ import 'app_states.dart';
 class ShopCubit extends Cubit<ShopStates> {
   ShopCubit() : super(ShopInitialState());
   HomeModelData? model;
+  ShopModel? userInfo;
   FavoritesModel? favModel;
   Map<int, bool> favourites = {};
   CategoryModel? catModel;
@@ -44,6 +49,7 @@ class ShopCubit extends Cubit<ShopStates> {
   }
 
   int currentIndex = 0;
+
   void changeBottomState(index) {
     currentIndex = index;
     emit(ShopChangeNavBarStates());
@@ -53,8 +59,8 @@ class ShopCubit extends Cubit<ShopStates> {
     emit(ShopHomeLoadingState());
     DioHelper.getData(url: home, token: token).then((value) {
       model = HomeModelData.fromJson(value.data);
-      for (var element in model!.data.products) {
-        favourites.addAll({element.id: element.favorite});
+      for (var element in model!.data!.products) {
+        favourites.addAll({element.id!: element.favorite!});
       }
       if (kDebugMode) {
         print(favourites.toString());
@@ -67,17 +73,13 @@ class ShopCubit extends Cubit<ShopStates> {
       }
     });
   }
+
   void categoryModel() {
     DioHelper.getData(url: category).then((value) {
       catModel = CategoryModel.fromJson(value.data);
-      if (kDebugMode) {
-        print(catModel!.status);
-      }
+
       if (kDebugMode) {
         print('Category came SuccessFully');
-      }
-      if (kDebugMode) {
-        print(catModel!.data.currentPage);
       }
       emit(ShopCategorySuccessState());
     }).catchError((error) {
@@ -87,22 +89,20 @@ class ShopCubit extends Cubit<ShopStates> {
       }
     });
   }
+
   void changeFavoriteState(int productId) {
     favourites[productId] = !favourites[productId]!;
     emit(ShopChangeFavoritesSuccessState());
     DioHelper.postData(
-            url: favorites,
+        url: favorites,
         data: {'product_id': productId},
-          token: token)
+        token: token)
         .then((value) {
       favModel = FavoritesModel.fromJson(value.data);
       if (favModel?.status != null) {
         favourites[productId] != favourites[productId];
       }
-        getFavoritesItems();
-      if (kDebugMode) {
-        print(favModel!.message.toString());
-      }
+      getFavoritesItems();
       emit(ShopChangeFavoritesSuccessState());
     }).catchError((error) {
       if (favModel?.status != null) {
@@ -123,19 +123,40 @@ class ShopCubit extends Cubit<ShopStates> {
           text: 'غير مصرح لك يرجي تسجيل الدخول من جديد', color: Colors.red);
     }
   }
-  void getFavoritesItems(){
+  void getFavoritesItems() {
     emit(ShopFavoritesLoadingState());
-    DioHelper.getData(url: favorites,token: token).then((value) {
+    DioHelper.getData(url: favorites, token: token).then((value) {
       favModel = FavoritesModel.fromJson(value.data);
-      if (kDebugMode) {
-        print('the info is here ${value.data.toString()}');
-      }
       emit(ShopFavoritesSuccessState());
     }).catchError((error) {
       emit(ShopFavoritesErrorState());
+    });
+  }
+  void getUserdata() {
+    emit(ShopUserDataLoadingState());
+    DioHelper.getData(
+        url: profile,
+        token: token
+    ).then((value) {
+      userInfo = ShopModel.fromJson(value.data);
+      if (kDebugMode) {
+        print(userInfo!.data!.name);
+      }
+      emit(ShopUserDataSuccessState());
+    }).catchError((error) {
+      emit(ShopUserDataErrorState());
       if (kDebugMode) {
         print(error.toString());
+        print('Name Of The error');
       }
     });
+  }
+  File? tempImage;
+  Future pickImage( ) async {
+    final image =await ImagePicker().pickImage(source: ImageSource.gallery);
+    if(image == null) return ;
+    final _image =File(image.path);
+    tempImage =_image;
+    emit(UserImageChange());
   }
 }
