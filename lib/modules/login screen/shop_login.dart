@@ -60,7 +60,7 @@ class ShopAppLoginScreen extends StatelessWidget {
                           height: 15,
                         ),
                         Text(
-                          'Login To Batty Shop and Browse our Offers',
+                          'Login To Koota Shop and Browse our Offers',
                           style: Theme.of(context)
                               .textTheme
                               .bodyText2

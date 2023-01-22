@@ -21,7 +21,8 @@ class FavoritesScreen extends StatelessWidget {
         return ConditionalBuilder(
           condition: state is! ShopFavoritesLoadingState,
           builder: (BuildContext context) {
-            return  Container(
+            return cubit.favModel!.data!.data.isNotEmpty?
+            Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
@@ -38,11 +39,11 @@ class FavoritesScreen extends StatelessWidget {
                         (index) =>
                         favoriteItem(context, cubit.favModel!.data!.data[index])),
               ),
-            );
+            ) :
+            const Center(child: Text('No Favorites Items Yet'));
           },
-          fallback: (BuildContext context) =>
-            const Center(child: CircularProgressIndicator()),
-        );
+          fallback: (BuildContext context) => const Center(child: CircularProgressIndicator(),
+        ));
       },
     );
   }
