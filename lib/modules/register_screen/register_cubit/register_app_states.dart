@@ -1,5 +1,4 @@
 import 'package:shop_app/models/register_model/register_model.dart';
-import 'package:shop_app/models/shop_model/shop_model.dart';
 
 abstract class RegisterAppStates {}
 

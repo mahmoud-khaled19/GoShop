@@ -50,12 +50,13 @@ Widget defaultElvButton({
   required String text,
   required Function() function,
   double width =double.infinity,
+  Color color =Colors.blue
 }) =>
     Container(
       width: width,
-      decoration: const BoxDecoration(
-        color: Colors.blue,
-        borderRadius: BorderRadius.only(topRight: Radius.circular(20),bottomLeft:  Radius.circular(20))
+      decoration:  BoxDecoration(
+        color: color,
+        borderRadius:const BorderRadius.only(topRight: Radius.circular(20),bottomLeft:  Radius.circular(20))
       ),
       child: TextButton(
           onPressed: function,

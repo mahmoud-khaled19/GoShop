@@ -4,8 +4,8 @@ import 'package:shop_app/layout/shop_layout.dart';
 import 'package:shop_app/modules/login%20screen/login_cubit/login_app_states.dart';
 import 'package:shop_app/modules/login%20screen/login_cubit/login_cubit.dart';
 import 'package:shop_app/shared/components/components.dart';
-import 'package:shop_app/shared/components/constants.dart';
 import 'package:shop_app/shared/network/local/shared_preferences.dart';
+import '../../shared/components/constants.dart';
 import '../register_screen/register_screen.dart';
 
 class ShopAppLoginScreen extends StatelessWidget {
@@ -21,11 +21,11 @@ class ShopAppLoginScreen extends StatelessWidget {
       child: BlocConsumer<LoginCubit, LoginAppStates>(
         listener: (context, state) {
           if (state is LoginSuccessState) {
-            if (  state.loginModel.status!) {
+            if (state.loginModel.status!) {
               CacheHelper.saveData(
                       key: 'token', value: state.loginModel.data!.token)
                   .then((value) {
-                    token =state.loginModel.data!.token;
+                token = state.loginModel.data!.token;
                 navigateAndFinish(context, const ShopLayout());
               });
             } else {

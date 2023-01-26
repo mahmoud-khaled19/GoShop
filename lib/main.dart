@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_app/layout/shop_layout.dart';
@@ -19,11 +18,8 @@ void main() async {
   await CacheHelper.init();
   bool? onBoarding = CacheHelper.getData(key: 'onBoarding');
   bool? isDark = CacheHelper.getData(key: 'isDark');
-  String? getPic = CacheHelper.getData(key: 'pic');
   token = CacheHelper.getData(key: 'token');
-  if (kDebugMode) {
-    print(token);
-  }
+  print(token);
   Widget widget;
   if (onBoarding != null) {
     if (token == null) {
@@ -34,17 +30,14 @@ void main() async {
   } else {
     widget = const ShopAppBoardingScreen();
   }
-  runApp(MyApp(isDark,getPic, widget));
+  runApp(MyApp(isDark, widget));
 }
 
 class MyApp extends StatelessWidget {
   final Widget widget;
   final bool? isDark;
-  final String? getPic;
-
   const MyApp(
       this.isDark,
-      this.getPic,
       this.widget, {super.key});
 
   // This widget is the root of your application.

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shop_app/modules/login%20screen/shop_login.dart';
 import 'package:shop_app/modules/register_screen/register_cubit/register_app_states.dart';
 import 'package:shop_app/modules/register_screen/register_cubit/register_cubit.dart';
 import '../../shared/components/components.dart';
-import '../../shared/components/constants.dart';
 import '../../shared/network/local/shared_preferences.dart';
+import 'get_image.dart';
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -116,37 +115,40 @@ class RegisterScreen extends StatelessWidget {
                       const SizedBox(
                         height: 40,
                       ),
-                      defaultElvButton(
-                          text: 'REGISTER',
-                          function: () {
-                            if (formKey.currentState!.validate()) {
-                              RegisterCubit.get(context).userRegister(
-                                  email: emailController.text,
-                                  name: nameController.text,
-                                  phone: phoneController.text,
-                                  password: passController.text);
-                              if (state is RegisterSuccessState) {
-                                if (state.model.status! == true) {
-                                  print(state.model.status!);
-                                  CacheHelper.saveData(
-                                      key: 'token', value: state.model.data!.token)
-                                      .then((value) {
-                                    defaultToast(text: state.model.message!, color: Colors.green);
-                                    token =state.model.data!.token;
-                                    navigateAndFinish(context, const ShopAppLoginScreen());
-                                  });
+                      Visibility(
+                        replacement:
+                        const Center(child: CircularProgressIndicator()),
+                        visible: state is! RegisterLoadingState,
+                        child: defaultElvButton(
+                            text: 'Register',
+                            function: () {
+                              if (formKey.currentState!.validate()) {
+                                RegisterCubit.get(context).userRegister(
+                                    email: emailController.text,
+                                    name: nameController.text,
+                                    phone: phoneController.text,
+                                    password: passController.text);
+                                if (state is RegisterSuccessState) {
+                                  if (state.model.status! == true) {
+                                    print(state.model.status!);
+                                    CacheHelper.saveData(
+                                        key: 'token', value: state.model.data!.token)
+                                        .then((value) {
+                                      defaultToast(text: state.model.message!, color: Colors.green);
+                                      navigateAndFinish(context, const ImageSelection());
+                                    });
 
-                                } else {
-                                  defaultToast(text: state.model.message!, color: Colors.red);
+                                  } else {
+                                    defaultToast(text: state.model.message!, color: Colors.red);
+                                  }
+                                } else if (state is RegisterErrorState) {
+                                  defaultToast(
+                                      text: ' تأكد من الاتصال بالانترنت ', color: Colors.green);
                                 }
-                              } else if (state is RegisterErrorState) {
-                                defaultToast(
-                                    text: ' تأكد من الاتصال بالانترنت ', color: Colors.green);
+
                               }
-
-                            }
-                          }),
-
+                            }),
+                      ),
                     ],
                   ),
                 ),

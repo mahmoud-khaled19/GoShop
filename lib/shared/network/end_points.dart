@@ -4,3 +4,4 @@ const category = 'categories';
 const favorites = 'favorites';
 const profile = 'profile';
 const register = 'register';
+const update = 'update-profile';

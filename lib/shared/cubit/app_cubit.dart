@@ -1,14 +1,10 @@
-import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:shop_app/models/favorite_model/favorites_model.dart';
 import 'package:shop_app/models/home_model/home_model.dart';
 import 'package:shop_app/shared/network/local/shared_preferences.dart';
 import 'package:shop_app/shared/network/remote/dio.dart';
-
 import '../../models/category_model/category_model.dart';
 import '../../models/shop_model/shop_model.dart';
 import '../../modules/categories/categories.dart';
@@ -24,6 +20,7 @@ class ShopCubit extends Cubit<ShopStates> {
   ShopCubit() : super(ShopInitialState());
   HomeModelData? model;
   ShopModel? userInfo;
+  ShopModel? updateInfo;
   FavoritesModel? favModel;
   Map<int, bool> favourites = {};
   CategoryModel? catModel;
@@ -151,12 +148,32 @@ class ShopCubit extends Cubit<ShopStates> {
       }
     });
   }
-  File? tempImage;
-  Future pickImage( ) async {
-    final image =await ImagePicker().pickImage(source: ImageSource.gallery);
-    if(image == null) return ;
-    final _image =File(image.path);
-    tempImage =_image;
-    emit(UserImageChange());
+  void updateUserdata({
+  required String name,
+  required String phone,
+  required String email,
+}) {
+    emit(ShopUpdateUserDataLoadingState());
+    DioHelper.putData(
+        url: update,
+        token: token,
+        data: {
+          'name':name,
+          'phone':phone,
+          'email':email,
+        }
+    ).then((value) {
+      updateInfo = ShopModel.fromJson(value.data);
+      if (kDebugMode) {
+        print(updateInfo?.data?.name);
+      }
+      emit(ShopUpdateUserinfoSuccessState());
+    }).catchError((error) {
+      emit(ShopUpdateUserinfoErrorState());
+      if (kDebugMode) {
+        print(error.toString());
+        print('Name Of The error');
+      }
+    });
   }
 }

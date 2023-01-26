@@ -19,6 +19,7 @@ class RegisterCubit extends Cubit<RegisterAppStates> {
 
   void userRegister({
     required String email,
+    String? image,
     required String name,
     required String phone,
     required String password,
@@ -28,7 +29,7 @@ class RegisterCubit extends Cubit<RegisterAppStates> {
         url: register,
         data: {
           'email': email, 'password': password,
-          'name': name, 'phone': phone
+          'name': name, 'phone': phone,'image':image
         })
         .then((value) {
       registerModel = RegisterModel.fromJson(value.data);
@@ -43,4 +44,5 @@ class RegisterCubit extends Cubit<RegisterAppStates> {
       }
     });
   }
+
 }
