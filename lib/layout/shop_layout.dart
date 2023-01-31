@@ -11,16 +11,26 @@ class ShopLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ShopCubit, ShopStates>(
-      listener: (context, state) {},
+      listener: (context, state) {
+
+      },
       builder: (context, state) {
         ShopCubit cubit = BlocProvider.of(context);
         return Scaffold(
           appBar: AppBar(
             title:const Text('KOoOTa SHOP'),
             actions: [
-              IconButton(icon:const Icon(Icons.search), onPressed: () {
-                navigateTo(context, const SearchScreen());
+              IconButton(icon:const Icon(Icons.compare_arrows), onPressed: () {
+                WidgetsFlutterBinding.ensureInitialized();
+                cubit.homeModel();
+                cubit.categoryModel();
+                cubit.getFavoritesItems();
+                cubit.getUserdata();
               },),
+              IconButton(icon:const Icon(Icons.search), onPressed: () {
+                navigateTo(context,  SearchScreen());
+              },),
+
               const SizedBox(
                 width: 5,
               ),

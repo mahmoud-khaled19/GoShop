@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shop_app/modules/login%20screen/shop_login.dart';
 import 'package:shop_app/modules/register_screen/register_cubit/register_app_states.dart';
 import 'package:shop_app/modules/register_screen/register_cubit/register_cubit.dart';
 import '../../shared/components/components.dart';
-import '../../shared/network/local/shared_preferences.dart';
-import 'get_image.dart';
-
+import '../../shared/cubit/app_cubit.dart';
+import '../../style/colors.dart';
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({Key? key}) : super(key: key);
 
@@ -20,6 +20,17 @@ class RegisterScreen extends StatelessWidget {
       create: (BuildContext context) => RegisterCubit(),
       child: BlocConsumer<RegisterCubit, RegisterAppStates>(
         listener: (context, state) {
+          if (state is RegisterSuccessState) {
+            if (state.model.status!) {
+              navigateAndFinish(context,  ShopAppLoginScreen());
+              defaultToast(text: state.model.message!, color: Colors.green);
+            } else {
+              defaultToast(text: state.model.message!, color: Colors.red);
+            }
+          } else if (state is RegisterErrorState) {
+            defaultToast(
+                text: ' تأكد من الاتصال بالانترنت ', color: Colors.green);
+          }
         },
         builder: (context, state) {
           return Scaffold(
@@ -35,12 +46,17 @@ class RegisterScreen extends StatelessWidget {
                       Text(
                         'Register',
                         style: Theme.of(context).textTheme.headline5?.copyWith(
-                            color: Colors.blue, fontWeight: FontWeight.bold),
+                           color: ShopCubit.get(context).isDark ? darkPrimaryColor
+                                : Colors.blue, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(
                         height: 50,
                       ),
                       defaultTextFormField(
+                          borderColor:  ShopCubit.get(context).isDark
+                              ? lightPrimaryColor
+                              : Colors.white,
+                          color: ShopCubit.get(context).isDark? Colors.white:Colors.red,
                           validate: (String? value) {
                             if (value!.isEmpty) {
                               return 'Write your Name';
@@ -58,6 +74,10 @@ class RegisterScreen extends StatelessWidget {
                         height: 20,
                       ),
                       defaultTextFormField(
+                          borderColor:  ShopCubit.get(context).isDark
+                              ? lightPrimaryColor
+                              : Colors.white,
+                          color: ShopCubit.get(context).isDark? Colors.white:Colors.red,
                           validate: (String? value) {
                             if (value!.isEmpty) {
                               return 'Write your Phone';
@@ -75,6 +95,10 @@ class RegisterScreen extends StatelessWidget {
                         height: 20,
                       ),
                       defaultTextFormField(
+                          borderColor:  ShopCubit.get(context).isDark
+                              ? lightPrimaryColor
+                              : Colors.white,
+                          color: ShopCubit.get(context).isDark? Colors.white:Colors.red,
                           validate: (String? value) {
                             if (value!.isEmpty) {
                               return 'Write your email';
@@ -92,6 +116,10 @@ class RegisterScreen extends StatelessWidget {
                         height: 20,
                       ),
                       defaultTextFormField(
+                        borderColor:  ShopCubit.get(context).isDark
+                            ? lightPrimaryColor
+                            : Colors.white,
+                          color: ShopCubit.get(context).isDark? Colors.white:Colors.red,
                           validate: (String? value) {
                             if (value!.isEmpty) {
                               return 'Write your password';
@@ -128,24 +156,6 @@ class RegisterScreen extends StatelessWidget {
                                     name: nameController.text,
                                     phone: phoneController.text,
                                     password: passController.text);
-                                if (state is RegisterSuccessState) {
-                                  if (state.model.status! == true) {
-                                    print(state.model.status!);
-                                    CacheHelper.saveData(
-                                        key: 'token', value: state.model.data!.token)
-                                        .then((value) {
-                                      defaultToast(text: state.model.message!, color: Colors.green);
-                                      navigateAndFinish(context, const ImageSelection());
-                                    });
-
-                                  } else {
-                                    defaultToast(text: state.model.message!, color: Colors.red);
-                                  }
-                                } else if (state is RegisterErrorState) {
-                                  defaultToast(
-                                      text: ' تأكد من الاتصال بالانترنت ', color: Colors.green);
-                                }
-
                               }
                             }),
                       ),

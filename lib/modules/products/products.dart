@@ -29,59 +29,53 @@ class ProductsScreen extends StatelessWidget {
   }
 }
 
-Widget productsBuilder(HomeModelData model, context) => RefreshIndicator(
-      displacement: 60,
-      onRefresh: () {
-        return refresh();
-      },
-      child: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          CarouselSlider(
-              items: model.data!.banners
-                  .map((e) => Image(
-                        image: NetworkImage(e.image!),
-                        width: double.infinity,
-                        fit: BoxFit.fill,
-                        height: MediaQuery.of(context).size.height * 0.25,
-                      ))
-                  .toList(),
-              options: CarouselOptions(
-                  autoPlay: true,
-                  viewportFraction: 1,
-                  scrollDirection: Axis.horizontal,
-                  autoPlayAnimationDuration: const Duration(seconds: 4),
-                  autoPlayCurve: Curves.fastOutSlowIn)),
-          const SizedBox(
-            height: 20,
-          ),
-          const Padding(
-            padding: EdgeInsets.only(left: 10),
-            child: Text(
-              'New Products',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Container(
-            color: Colors.grey[100],
-            child: GridView.count(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                childAspectRatio: 1 / 1.44,
-                crossAxisSpacing: 2,
-                mainAxisSpacing: 2,
-                crossAxisCount: 2,
-                children: List.generate(
-                  model.data!.products.length,
-                  (index) => productItem(model.data!.products[index], context),
-                )),
-          )
-        ]),
+Widget productsBuilder(HomeModelData model, context) => SingleChildScrollView(
+  physics: const BouncingScrollPhysics(),
+  child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+    CarouselSlider(
+        items: model.data!.banners
+            .map((e) => Image(
+                  image: NetworkImage(e.image!),
+                  width: double.infinity,
+                  fit: BoxFit.fill,
+                  height: MediaQuery.of(context).size.height * 0.25,
+                ))
+            .toList(),
+        options: CarouselOptions(
+            autoPlay: true,
+            viewportFraction: 1,
+            scrollDirection: Axis.horizontal,
+            autoPlayAnimationDuration: const Duration(seconds: 4),
+            autoPlayCurve: Curves.fastOutSlowIn)),
+    const SizedBox(
+      height: 20,
+    ),
+    const Padding(
+      padding: EdgeInsets.only(left: 10),
+      child: Text(
+        'New Products',
+        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
       ),
-    );
+    ),
+    const SizedBox(
+      height: 10,
+    ),
+    Container(
+      color: Colors.grey[100],
+      child: GridView.count(
+          physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          childAspectRatio: 1 / 1.44,
+          crossAxisSpacing: 2,
+          mainAxisSpacing: 2,
+          crossAxisCount: 2,
+          children: List.generate(
+            model.data!.products.length,
+            (index) => productItem(model.data!.products[index], context),
+          )),
+    )
+  ]),
+);
 
 Widget productItem(ProductsModel model, context) =>
     BlocConsumer<ShopCubit, ShopStates>(
@@ -158,7 +152,8 @@ Widget productItem(ProductsModel model, context) =>
                             'Egp ${model.price.round()}',
                             maxLines: 1,
                             style: TextStyle(
-                                fontSize: 14, color: model.discount != 0? lightPrimaryColor:Colors.black),
+                                fontSize: 14, color: model.discount != 0?
+                            lightPrimaryColor:Colors.black),
                           ),
                           const SizedBox(width: 8),
                           if (model.discount != 0)
@@ -215,6 +210,4 @@ Widget productItem(ProductsModel model, context) =>
       },
     );
 
-Future<void> refresh() {
-  return Future.delayed(const Duration(seconds: 10));
-}
+

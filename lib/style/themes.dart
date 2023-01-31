@@ -27,17 +27,17 @@ ThemeData lightMode = ThemeData(
         fontWeight: FontWeight.bold,
       ),
     ),
-    scaffoldBackgroundColor: Colors.white,
-    appBarTheme:const AppBarTheme(
-        iconTheme:  IconThemeData(color: Colors.black, size: 25),
+    scaffoldBackgroundColor: HexColor('#F2F3F4'),
+    appBarTheme: AppBarTheme(
+        iconTheme:  const IconThemeData(color: Colors.black, size: 25),
         systemOverlayStyle:  SystemUiOverlayStyle(
-            statusBarColor: Colors.white,
+            statusBarColor:HexColor('#F2F3F4'),
             statusBarIconBrightness: Brightness.dark),
-        backgroundColor: Colors.white,
+        backgroundColor: HexColor('#F2F3F4'),
         elevation: 0,
-        titleTextStyle: TextStyle(
+        titleTextStyle:const TextStyle(
             color: Colors.black,
-            fontSize: 18,
+            fontSize: 16,
             fontWeight: FontWeight.bold)),
 
     );
@@ -56,16 +56,16 @@ ThemeData darkMode = ThemeData(
             color: Colors.deepOrange)),
     scaffoldBackgroundColor: darkPrimaryColor,
     appBarTheme: AppBarTheme(
-        titleSpacing: 20,
-        iconTheme: const IconThemeData(color: Colors.deepOrange, size: 25),
+        titleSpacing: 18,
+        iconTheme: const IconThemeData(color: Colors.white, size: 25),
         systemOverlayStyle: SystemUiOverlayStyle(
             statusBarColor: darkPrimaryColor,
             statusBarIconBrightness: Brightness.light),
         backgroundColor: darkPrimaryColor,
-        elevation: 10,
+        elevation: 0,
         titleTextStyle: const TextStyle(
-            color: Colors.deepOrange,
-            fontSize: 20,
+            color: Colors.white,
+            fontSize: 16,
             fontWeight: FontWeight.bold)),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
         type: BottomNavigationBarType.fixed,

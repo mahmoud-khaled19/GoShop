@@ -5,3 +5,5 @@ const favorites = 'favorites';
 const profile = 'profile';
 const register = 'register';
 const update = 'update-profile';
+const search = 'products/search';
+const cart = 'carts';

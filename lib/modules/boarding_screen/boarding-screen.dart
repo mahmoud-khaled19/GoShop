@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shop_app/shared/components/components.dart';
 import 'package:shop_app/shared/network/local/shared_preferences.dart';
+import 'package:shop_app/style/colors.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../login screen/shop_login.dart';
@@ -16,9 +17,9 @@ class ShopAppBoardingScreen extends StatefulWidget {
 class _ShopAppBoardingScreenState extends State<ShopAppBoardingScreen> {
   var boardingController = PageController();
   List<BoardingList> modelList = [
-    BoardingList('First Screen', 'First Body', 'assets/img.png'),
-    BoardingList('Second Screen', 'Second Body', 'assets/img.png'),
-    BoardingList('Third Screen', 'Third Body', 'assets/img.png'),
+    BoardingList( ' Discover a wide range of products, great deals, and hassle-free shopping in one place. Let\'s get started!', 'assets/3.jpg'),
+    BoardingList('We have designed this app to make your shopping experience seamless, fast and easy. Get started now!', 'assets/2.jpg'),
+    BoardingList('With our secure checkout, tracking system, and easy returns, you can shop with confidence. Explore our store now!', 'assets/1.jpg'),
   ];
   bool isLast = false;
  void submit(){
@@ -46,13 +47,16 @@ class _ShopAppBoardingScreenState extends State<ShopAppBoardingScreen> {
              Row(
                children: [
                  Text('KOoOTa SHOP',style: Theme.of(context).textTheme.headline5?.copyWith(
-                   color: Colors.blue,fontWeight: FontWeight.w700
+                   color: darkPrimaryColor
                  )),
                  const Spacer(),
                  defaultTextButton(
                      function: submit, text: 'Skip'),
                ],
              ),
+              const SizedBox(
+                height: 15,
+              ),
               Expanded(
                 child: PageView.builder(
                   onPageChanged: (value) {
@@ -72,8 +76,8 @@ class _ShopAppBoardingScreenState extends State<ShopAppBoardingScreen> {
               Row(
                 children: [
                   SmoothPageIndicator(
-                      effect: const ExpandingDotsEffect(
-                        activeDotColor: Colors.blue,
+                      effect:  ExpandingDotsEffect(
+                        activeDotColor: darkPrimaryColor,
                         dotWidth: 26.0,
                         dotHeight: 15.0,
                       ),
@@ -81,6 +85,7 @@ class _ShopAppBoardingScreenState extends State<ShopAppBoardingScreen> {
                       count: modelList.length),
                   const Spacer(),
                   FloatingActionButton(
+                    backgroundColor: darkPrimaryColor,
                     onPressed: () {
                       if (isLast) {
                         submit();
@@ -106,10 +111,10 @@ Widget pageViewItem(BoardingList model) => Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(child: Image(image: AssetImage(model.image))),
-        Text(model.title),
         const SizedBox(
           height: 20,
         ),
+
         Text(model.body),
         const SizedBox(
           height: 50,
@@ -118,9 +123,8 @@ Widget pageViewItem(BoardingList model) => Column(
     );
 
 class BoardingList {
-  late final String title;
   late final String body;
   late final String image;
 
-  BoardingList(this.title, this.body, this.image);
+  BoardingList( this.body, this.image);
 }

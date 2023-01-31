@@ -22,14 +22,11 @@ class ProductDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<ShopCubit, ShopStates>(
       listener: (BuildContext context, Object? state) {
-        ShopCubit.get(context).favourites[id]!
-            ? Icons.favorite
-            : Icons.favorite;
       },
       builder: (BuildContext context, state) {
+        ShopCubit cubit = BlocProvider.of(context);
         return Scaffold(
           appBar: AppBar(
-            title: const Center(child: Text('')),
           ),
           body: Column(
             children: [
@@ -49,7 +46,7 @@ class ProductDetails extends StatelessWidget {
                         const SizedBox(
                           height: 10,
                         ),
-                        Text('$price'),
+                        Text(' Egp $price'),
                         const SizedBox(
                           height: 10,
                         ),
@@ -75,10 +72,10 @@ class ProductDetails extends StatelessWidget {
                         color: Colors.grey[200],
                         child: InkWell(
                           onTap: () {
-                            ShopCubit.get(context).changeFavoriteState(id);
+                            cubit.changeFavoriteState(id);
                           },
                           child: Icon(
-                            ShopCubit.get(context).favourites[id]!
+                            cubit.favourites[id]!
                                 ? Icons.favorite
                                 : Icons.favorite_border,
                             color: Colors.red,
@@ -87,15 +84,20 @@ class ProductDetails extends StatelessWidget {
                         ),
                       ),
                       Expanded(
-                          child: Container(
-                              color: Colors.black,
-                              height: 40,
-                              child: const Center(
-                                  child: Text(
-                                'Add To Bag',
-                                style: TextStyle(
-                                    fontSize: 14, color: Colors.white),
-                              ))))
+                          child: InkWell(
+                            onTap: (){
+                              cubit.changeCartsState(id);
+                            },
+                            child: Container(
+                                color: Colors.black,
+                                height: 40,
+                                child:  Center(
+                                    child:const Text(
+                                      'Add To Bag',
+                                      style: TextStyle(
+                                          fontSize: 14, color: Colors.white),
+                                    ) )   ),
+                          ))
                     ],
                   ))
             ],

@@ -19,10 +19,17 @@ class ShopUserDataSuccessState extends ShopStates{
  ShopUserDataSuccessState({this.model});
 }
 class ShopUserDataLoadingState extends ShopStates{}
-class ShopUpdateUserDataLoadingState extends ShopStates{}
+class ShopUpdateUserinfoLoadingState extends ShopStates{}
 class ShopUserDataErrorState extends ShopStates{}
 class ShopUpdateUserinfoErrorState extends ShopStates{}
 class ShopUpdateUserinfoSuccessState extends ShopStates{
  ShopModel? model;
  ShopUpdateUserinfoSuccessState({this.model});
 }
+class ChangeImageSuccessState extends ShopStates {}
+class ChangeImageErrorState extends ShopStates {}
+class ShopChangeCartsSuccessState extends ShopStates{}
+class ShopChangeCartsErrorState extends ShopStates{}
+class ShopCartsSuccessState extends ShopStates{}
+class ShopCartsLoadingState extends ShopStates{}
+class ShopCartsErrorState extends ShopStates{}

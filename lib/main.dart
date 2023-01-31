@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_app/layout/shop_layout.dart';
 import 'package:shop_app/modules/login%20screen/shop_login.dart';
+import 'package:shop_app/modules/splash-screen/splash_screen.dart';
 import 'package:shop_app/shared/components/constants.dart';
 import 'package:shop_app/shared/cubit/app_states.dart';
 import 'package:shop_app/shared/cubit/app_cubit.dart';
@@ -44,17 +45,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (BuildContext context) => ShopCubit()..homeModel()
-          ..categoryModel()..getFavoritesItems()..getUserdata(),
+        create: (BuildContext context) => ShopCubit()..homeModel()..changeShopTheme(fromShared: isDark)
+          ..categoryModel()..getFavoritesItems()..getUserdata()..getCartsItems(),
         child: BlocConsumer<ShopCubit, ShopStates>(
           listener: (context, state) {},
           builder: (context, state) {
             return MaterialApp(
+              title: 'KOoOta_Shop',
               debugShowCheckedModeBanner: false,
               theme: lightMode,
               darkTheme: darkMode,
-              themeMode: ThemeMode.light,
-              home: widget,
+              themeMode: ShopCubit.get(context).isDark? ThemeMode.light :ThemeMode.dark,
+              home:  const SplashScreen(),
             );
           },
         ));

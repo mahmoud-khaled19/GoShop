@@ -1,12 +1,17 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shop_app/models/favorite_model/favorites_model.dart';
 import 'package:shop_app/models/home_model/home_model.dart';
 import 'package:shop_app/shared/network/local/shared_preferences.dart';
 import 'package:shop_app/shared/network/remote/dio.dart';
+import '../../models/carts_model/carts_model.dart';
 import '../../models/category_model/category_model.dart';
 import '../../models/shop_model/shop_model.dart';
+import '../../modules/cart/cart.dart';
 import '../../modules/categories/categories.dart';
 import '../../modules/favorite/favorites.dart';
 import '../../modules/products/products.dart';
@@ -22,7 +27,9 @@ class ShopCubit extends Cubit<ShopStates> {
   ShopModel? userInfo;
   ShopModel? updateInfo;
   FavoritesModel? favModel;
+  CartsModel? cartModel;
   Map<int, bool> favourites = {};
+  Map<int, bool> carts = {};
   CategoryModel? catModel;
 
   static ShopCubit get(context) => BlocProvider.of(context);
@@ -31,7 +38,7 @@ class ShopCubit extends Cubit<ShopStates> {
     const ProductsScreen(),
     const CategoriesScreen(),
     const FavoritesScreen(),
-    const SettingsScreen(),
+     SettingsScreen(),
   ];
 
   void changeShopTheme({bool? fromShared}) {
@@ -86,14 +93,11 @@ class ShopCubit extends Cubit<ShopStates> {
       }
     });
   }
-
   void changeFavoriteState(int productId) {
     favourites[productId] = !favourites[productId]!;
     emit(ShopChangeFavoritesSuccessState());
     DioHelper.postData(
-        url: favorites,
-        data: {'product_id': productId},
-        token: token)
+            url: favorites, data: {'product_id': productId}, token: token)
         .then((value) {
       favModel = FavoritesModel.fromJson(value.data);
       if (favModel?.status != null) {
@@ -120,6 +124,7 @@ class ShopCubit extends Cubit<ShopStates> {
           text: 'غير مصرح لك يرجي تسجيل الدخول من جديد', color: Colors.red);
     }
   }
+
   void getFavoritesItems() {
     emit(ShopFavoritesLoadingState());
     DioHelper.getData(url: favorites, token: token).then((value) {
@@ -129,12 +134,10 @@ class ShopCubit extends Cubit<ShopStates> {
       emit(ShopFavoritesErrorState());
     });
   }
+
   void getUserdata() {
     emit(ShopUserDataLoadingState());
-    DioHelper.getData(
-        url: profile,
-        token: token
-    ).then((value) {
+    DioHelper.getData(url: profile, token: token).then((value) {
       userInfo = ShopModel.fromJson(value.data);
       if (kDebugMode) {
         print(userInfo!.data!.name);
@@ -148,21 +151,18 @@ class ShopCubit extends Cubit<ShopStates> {
       }
     });
   }
+
   void updateUserdata({
-  required String name,
-  required String phone,
-  required String email,
-}) {
-    emit(ShopUpdateUserDataLoadingState());
-    DioHelper.putData(
-        url: update,
-        token: token,
-        data: {
-          'name':name,
-          'phone':phone,
-          'email':email,
-        }
-    ).then((value) {
+    required String name,
+    required String phone,
+    required String email,
+  }) {
+    emit(ShopUpdateUserinfoLoadingState());
+    DioHelper.putData(url: update, token: token, data: {
+      'name': name,
+      'phone': phone,
+      'email': email,
+    }).then((value) {
       updateInfo = ShopModel.fromJson(value.data);
       if (kDebugMode) {
         print(updateInfo?.data?.name);
@@ -174,6 +174,65 @@ class ShopCubit extends Cubit<ShopStates> {
         print(error.toString());
         print('Name Of The error');
       }
+    });
+  }
+  File? selectedImage ;
+  Future pickImage(ImageSource source) async {
+    try{
+      final image = await ImagePicker().pickImage(source: source);
+      if (image ==null){
+        return;
+      }
+      else{
+        File? img =File(image.path);
+        selectedImage = img;
+        emit((ChangeImageSuccessState()));
+      }
+    } catch(e){
+      if (kDebugMode) {
+        print(e.toString());
+      }
+      emit((ChangeImageErrorState()));
+    }
+
+  }
+
+  void changeCartsState(int productId) {
+    // carts[productId] = !carts[productId]!;
+    // emit(ShopChangeCartsSuccessState());
+    DioHelper.postData(
+        url: cart, data: {'product_id': productId}, token: token)
+        .then((value) {
+      cartModel = CartsModel.fromJson(value.data);
+      if (catModel?.status != null) {
+        carts[productId] != carts[productId];
+      }
+      getCartsItems();
+      emit(ShopChangeCartsSuccessState());
+    }).catchError((error) {
+      if (catModel?.status != null) {
+        carts[productId] !=  carts[productId]!;
+      }
+      emit(ShopChangeCartsErrorState());
+    });
+
+      if (carts[productId]!) {
+        defaultToast(
+            text: 'تم إضافه المنتج إلي الشنطه', color: Colors.green);
+      } else {
+        defaultToast(
+            text: 'تم حذف المنتج من الشنطه ', color: Colors.yellow);
+    }
+  }
+  void getCartsItems() {
+    emit(ShopCartsLoadingState());
+    DioHelper.getData(url: favorites, token: token).then((value) {
+      cartModel = CartsModel.fromJson(value.data);
+
+      emit(ShopCartsSuccessState());
+      print(cartModel!.data?.id);
+    }).catchError((error) {
+      emit(ShopCartsErrorState());
     });
   }
 }

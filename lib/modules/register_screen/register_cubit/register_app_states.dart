@@ -19,3 +19,5 @@ class RegisterErrorState extends RegisterAppStates {
 
   RegisterErrorState(this.error);
 }
+class UploadRegisterImageSuccessState extends RegisterAppStates {}
+class UploadRegisterImageErrorState extends RegisterAppStates {}

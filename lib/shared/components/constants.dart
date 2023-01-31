@@ -5,7 +5,9 @@ import 'components.dart';
 
 void signOut(context){
   CacheHelper.removeData(key: 'token').then((value) {
-    navigateAndFinish(context, const ShopAppLoginScreen());
+    if (value!){
+      navigateAndFinish(context, const ShopAppLoginScreen());
+    }
     if (kDebugMode) {
       print('remove token');
     }
