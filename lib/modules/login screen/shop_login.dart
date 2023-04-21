@@ -1,12 +1,12 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shop_app/app_constance/strings_manager.dart';
 import 'package:shop_app/layout/shop_layout.dart';
 import 'package:shop_app/modules/login%20screen/login_cubit/login_app_states.dart';
 import 'package:shop_app/modules/login%20screen/login_cubit/login_cubit.dart';
 import 'package:shop_app/shared/components/components.dart';
-import 'package:shop_app/shared/cubit/app_cubit.dart';
 import 'package:shop_app/shared/network/local/shared_preferences.dart';
-import 'package:shop_app/style/colors.dart';
 import '../../shared/components/constants.dart';
 import '../register_screen/register_screen.dart';
 
@@ -46,83 +46,45 @@ class ShopAppLoginScreen extends StatelessWidget {
                 child: Form(
                   key: formKey,
                   child: SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Welcome',
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline5
-                              ?.copyWith(
-                                  color: ShopCubit.get(context).isDark
-                                      ? darkPrimaryColor
-                                      : Colors.white,
-                                  fontWeight: FontWeight.bold),
+                          AppStrings.welcome.tr(),
+                          style: Theme.of(context).textTheme.headlineLarge,
                         ),
                         const SizedBox(
                           height: 15,
                         ),
                         Text(
-                          'Login To Koota Shop and Browse our Offers',
-                          style:
-                              Theme.of(context).textTheme.bodyText2?.copyWith(
-                                    color: ShopCubit.get(context).isDark
-                                        ? darkPrimaryColor
-                                        : Colors.white,
-                                  ),
+                          AppStrings.loginMessage.tr(),
+                          style: Theme.of(context).textTheme.titleMedium,
                         ),
                         const SizedBox(
                           height: 50,
                         ),
-                        defaultTextFormField(
-                          textColor: ShopCubit.get(context).isDark
-                              ? darkPrimaryColor
-                              : Colors.white,
-                          borderColor: ShopCubit.get(context).isDark
-                              ? darkPrimaryColor
-                              : Colors.white,
-                            color: ShopCubit.get(context).isDark
-                                ? darkPrimaryColor
-                                : Colors.white,
+                        defaultTextFormField(context: context,
                             validate: (String? value) {
-                              if (value!.isEmpty) {
-                                return 'Enter your Email';
-                              } else {
-                                return null;
-                              }
-                            },
+                          if (value!.isEmpty) {
+                            return AppStrings.validateEmail.tr();
+                          } else {
+                            return null;
+                          }
+                        },
                             type: TextInputType.emailAddress,
                             isSecure: false,
                             controller: emailController,
                             prefix: Icons.email_outlined,
-                            prefixColor: ShopCubit.get(context).isDark
-                                ? darkPrimaryColor
-                                : Colors.white,
-                            label: 'Email Address',
-                            function: () {}),
+                            label: AppStrings.emailLabel.tr(),
+                        ),
                         const SizedBox(
                           height: 20,
                         ),
-                        defaultTextFormField(
-                          textColor: ShopCubit.get(context).isDark
-                              ? darkPrimaryColor
-                              : Colors.white,
-                          borderColor:  ShopCubit.get(context).isDark
-                              ? darkPrimaryColor
-                              : Colors.white,
-                            prefixColor: ShopCubit.get(context).isDark
-                                ? darkPrimaryColor
-                                : Colors.white,
-                            suffixColor: ShopCubit.get(context).isDark
-                                ? darkPrimaryColor
-                                : Colors.white,
-                            color: ShopCubit.get(context).isDark
-                                ? darkPrimaryColor
-                                : Colors.white,
+                        defaultTextFormField(context: context,
                             validate: (String? value) {
                               if (value!.isEmpty) {
-                                return 'Enter your password';
+                                return AppStrings.validatePassword.tr();
                               } else {
                                 return null;
                               }
@@ -138,10 +100,10 @@ class ShopAppLoginScreen extends StatelessWidget {
                             isSecure: LoginCubit.get(context).isVisible,
                             controller: passwordController,
                             prefix: Icons.lock,
-                            suffix: LoginCubit.get(context).isVisible == false
+                            suffix: LoginCubit.get(context).isVisible
                                 ? Icons.visibility
                                 : Icons.visibility_off,
-                            label: 'password ',
+                            label: AppStrings.passwordLabel.tr(),
                             function: () {
                               LoginCubit.get(context).changePassVisibility();
                             }),
@@ -153,10 +115,8 @@ class ShopAppLoginScreen extends StatelessWidget {
                               const Center(child: CircularProgressIndicator()),
                           visible: state is! LoginLoadingState,
                           child: defaultElvButton(
-                            color: ShopCubit.get(context).isDark
-                                ? darkPrimaryColor
-                                : lightPrimaryColor,
-                              text: 'Login',
+                              context: context,
+                              text: AppStrings.login.tr(),
                               function: () {
                                 if (formKey.currentState!.validate()) {
                                   LoginCubit.get(context).userLogin(
@@ -170,13 +130,12 @@ class ShopAppLoginScreen extends StatelessWidget {
                         ),
                         Row(
                           children: [
-                            const Text('Don\'t have an email?'),
+                             Text(AppStrings.donHaveEmail.tr()),
                             defaultTextButton(
-
                                 function: () {
                                   navigateTo(context, const RegisterScreen());
                                 },
-                                text: 'Register')
+                                text: AppStrings.register.tr())
                           ],
                         )
                       ],

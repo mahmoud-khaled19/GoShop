@@ -1,17 +1,18 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shop_app/app_constance/strings_manager.dart';
 import 'package:shop_app/shared/components/components.dart';
 import 'package:shop_app/shared/cubit/app_cubit.dart';
 import 'package:shop_app/shared/cubit/app_states.dart';
-import 'package:shop_app/style/colors.dart';
 
 class PrivacyScreen extends StatelessWidget {
-  var nameController = TextEditingController();
-  var phoneController = TextEditingController();
-  var emailController = TextEditingController();
+  final nameController = TextEditingController();
+  final phoneController = TextEditingController();
+  final emailController = TextEditingController();
 
-  var formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
 
   PrivacyScreen({super.key});
 
@@ -27,17 +28,17 @@ class PrivacyScreen extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        ShopCubit cubit =BlocProvider.of(context);
+        ShopCubit cubit = BlocProvider.of(context);
         return Scaffold(
             appBar: AppBar(
-              title: const Center(child: Text('update & Delete')),
+              title:  Center(child: Text(AppStrings.update.tr())),
             ),
             body: BlocConsumer<ShopCubit, ShopStates>(
               listener: (context, state) {},
               builder: (context, state) {
-                var model = ShopCubit.get(context).userInfo!;
+                var model = cubit.userInfo!;
                 return ConditionalBuilder(
-                  condition: ShopCubit.get(context).userInfo != null,
+                  condition: cubit.userInfo != null,
                   builder: (BuildContext context) => SingleChildScrollView(
                     child: Padding(
                       padding: const EdgeInsets.all(15),
@@ -50,69 +51,51 @@ class PrivacyScreen extends StatelessWidget {
                             SizedBox(
                               height: hSize * 0.03,
                             ),
-                            defaultTextFormField(
-                              borderColor:   cubit.isDark? lightPrimaryColor:Colors.white,
-                                textColor: cubit.isDark? Colors.black:Colors.white,
-                                color: cubit.isDark? lightPrimaryColor:Colors.white,
-                                prefix: Icons.title,
-                                prefixColor:  cubit.isDark? lightPrimaryColor:Colors.white,
+                            defaultTextFormField(context: context,
                                 type: TextInputType.text,
                                 controller: nameController,
                                 validate: (String? value) {
-                                  if (value!.isEmpty) {
-                                    nameController.text = model.data!.name!;
-                                  }
-                                  return;
-                                },
-                                label: 'Name',
-                                function: () {}),
+                              if (value!.isEmpty) {
+                                nameController.text = model.data!.name!;
+                              }
+                              return;
+                            }, label: AppStrings.nameLabel.tr()),
                             const SizedBox(
                               height: 15,
                             ),
-                            defaultTextFormField(
-                              borderColor:  cubit.isDark? lightPrimaryColor:Colors.white,
-                                textColor: cubit.isDark? Colors.black:Colors.white,
-                              prefixColor:  cubit.isDark? lightPrimaryColor:Colors.white,
-                                color: cubit.isDark? lightPrimaryColor:Colors.white,
+                            defaultTextFormField(context: context,
                                 prefix: Icons.phone_android,
                                 type: TextInputType.phone,
                                 controller: phoneController,
                                 validate: (String? value) {
-                                  if (value!.isEmpty) {
-                                    phoneController.text = model.data!.phone!;
-                                  }
-                                  return;
-                                },
-                                label: 'phone',
-                                function: () {}),
+                              if (value!.isEmpty) {
+                                phoneController.text = model.data!.phone!;
+                              }
+                              return;
+                            }, label: AppStrings.phoneLabel.tr()),
                             const SizedBox(
                               height: 15,
                             ),
-                            defaultTextFormField(
-                              borderColor: cubit.isDark? lightPrimaryColor:Colors.white ,
-                                textColor: cubit.isDark? Colors.black:Colors.white,
-                              prefixColor:  cubit.isDark? lightPrimaryColor:Colors.white,
-                                color: cubit.isDark? lightPrimaryColor:Colors.white,
+                            defaultTextFormField(context: context,
                                 prefix: Icons.email,
                                 type: TextInputType.emailAddress,
                                 controller: emailController,
                                 validate: (String? value) {
-                                  if (value!.isEmpty) {
-                                    emailController.text = model.data!.email!;
-                                  }
-                                  return null;
-                                },
-                                label: 'email',
-                                function: () {}),
+                              if (value!.isEmpty) {
+                                emailController.text = model.data!.email!;
+                              }
+                              return null;
+                            }, label: AppStrings.emailLabel.tr(), function: () {}),
                             SizedBox(
                               height: hSize * 0.04,
                             ),
                             defaultElvButton(
+                              context: context,
                                 width: wSize * 0.4,
-                                text: 'Update',
+                                text: AppStrings.update.tr(),
                                 function: () {
                                   if (formKey.currentState!.validate()) {
-                                    ShopCubit.get(context).updateUserdata(
+                                    cubit.updateUserdata(
                                       name: nameController.text,
                                       phone: phoneController.text,
                                       email: emailController.text,

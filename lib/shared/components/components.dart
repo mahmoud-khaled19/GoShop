@@ -1,6 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import '../../style/colors.dart';
+import 'package:shop_app/app_constance/strings_manager.dart';
 import '../cubit/app_cubit.dart';
 
 void navigateAndFinish(context, widget) {
@@ -14,46 +15,54 @@ void navigateTo(context, widget) {
 
 Widget defaultTextFormField({
   required TextEditingController controller,
+  required BuildContext context,
   required String? Function(String? val)? validate,
   bool isSecure = false,
   TextInputType type = TextInputType.emailAddress,
   required String label,
   IconData prefix = Icons.login,
   IconData? suffix,
-  required Color color,
-   Color? prefixColor,
-   Color? suffixColor,
-   required Color borderColor,
-   Color? textColor,
-  required Function() function,
+  Function()? function,
   Function(String value)? onSubmit,
 }) =>
-    TextFormField(
-        style: TextStyle(color: textColor),
-        keyboardType: type,
-        obscureText: isSecure,
-        onFieldSubmitted: onSubmit,
-        controller: controller,
-        validator: validate,
-        decoration: InputDecoration(
-
-          label: Text(label,style: TextStyle(
-            color: color
-          ),),
-          prefixIcon: Icon(prefix,color: prefixColor,),
-          suffixIcon: IconButton(
-            onPressed: function,
-            icon: Icon(suffix,color: suffixColor,),
-          ),
-          border:  OutlineInputBorder(
-            borderSide: BorderSide(
-             color: borderColor
-            ),
-              borderRadius: const BorderRadius.only(
-            topRight: Radius.circular(20),
-            bottomLeft: Radius.circular(20),
-          )),
-        ));
+    Column(
+      children: [
+        const SizedBox(
+          height: 20,
+        ),
+        TextFormField(
+            style: TextStyle(color: Theme.of(context).primaryColor),
+            keyboardType: type,
+            obscureText: isSecure,
+            onFieldSubmitted: onSubmit,
+            controller: controller,
+            validator: validate,
+            decoration: InputDecoration(
+              label: Text(
+                label,
+                style: TextStyle(color: Theme.of(context).primaryColor),
+              ),
+              prefixIcon: Icon(
+                prefix,
+                color: Theme.of(context).iconTheme.color,
+              ),
+              suffixIcon: IconButton(
+                onPressed: function,
+                icon: Icon(
+                  suffix,
+                  color: Theme.of(context).iconTheme.color,
+                ),
+              ),
+              border: OutlineInputBorder(
+                  borderSide: BorderSide(
+                      color: Theme.of(context).scaffoldBackgroundColor),
+                  borderRadius: const BorderRadius.only(
+                    topRight: Radius.circular(20),
+                    bottomLeft: Radius.circular(20),
+                  )),
+            )),
+      ],
+    );
 
 Widget defaultTextButton({
   required String text,
@@ -66,15 +75,16 @@ Widget defaultTextButton({
           style: const TextStyle(color: Colors.blue, fontSize: 12),
         ));
 
-Widget defaultElvButton(
-        {required String text,
-        required Function() function,
-        double width = double.infinity,
-        Color color = Colors.blue}) =>
+Widget defaultElvButton({
+  required String text,
+  required Function() function,
+  context,
+  double width = double.infinity,
+}) =>
     Container(
       width: width,
       decoration: BoxDecoration(
-          color: color,
+          color: Theme.of(context).splashColor,
           borderRadius: const BorderRadius.only(
               topRight: Radius.circular(20), bottomLeft: Radius.circular(20))),
       child: TextButton(
@@ -94,8 +104,8 @@ Future<bool?> defaultToast({
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 1,
-        backgroundColor: Colors.green,
-        textColor: color,
+        backgroundColor: color,
+        textColor: Colors.white,
         fontSize: 16.0);
 
 Widget productListItem(context, model) => Container(
@@ -122,9 +132,9 @@ Widget productListItem(context, model) => Container(
                       color: Colors.red,
                       borderRadius: BorderRadius.circular(10)),
                   padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: const Text(
-                    'Discount',
-                    style: TextStyle(color: Colors.white),
+                  child:  Text(
+                  AppStrings.discount.tr(),
+                    style: const TextStyle(color: Colors.white),
                   ),
                 )
             ],
@@ -137,12 +147,7 @@ Widget productListItem(context, model) => Container(
                 Text(
                   'EGP ${model.product!.price.toString()}',
                   maxLines: 1,
-                  style: TextStyle(
-                      height: 1.8,
-                      fontSize: 14,
-                      color: model.product!.discount != 0
-                          ? lightPrimaryColor
-                          : Colors.black),
+                  style:  Theme.of(context).textTheme.titleSmall,
                 ),
                 const SizedBox(width: 8),
                 const Spacer(),
@@ -168,24 +173,27 @@ Widget productListItem(context, model) => Container(
         ],
       ),
     );
+
 Widget settingItem({
-  Color? contColor,
+  context,
   required String text,
-  Color? texColor,
-  Color? iconColor,
   Function()? function,
-  IconData? icon
-})=>  Container(
-  color:contColor,
-  margin: const EdgeInsets.symmetric(horizontal: 10),
-  child: ListTile(
-    style: ListTileStyle.list,
-    title:  Text(text,style: TextStyle(
-        color:texColor
-    ),),
-    trailing: IconButton(
-      onPressed: function,
-      icon:   Icon(icon,color: iconColor,)
-    ),
-  ),
-);
+  IconData? icon,
+}) =>
+    Container(
+      color: Theme.of(context).cardColor,
+      margin: const EdgeInsets.symmetric(horizontal: 10),
+      child: ListTile(
+        style: ListTileStyle.list,
+        title: Text(
+          text,
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        trailing: IconButton(
+            onPressed: function,
+            icon: Icon(
+              icon,
+              color: Theme.of(context).splashColor,
+            )),
+      ),
+    );

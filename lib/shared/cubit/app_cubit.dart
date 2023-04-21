@@ -1,17 +1,13 @@
-import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:shop_app/models/favorite_model/favorites_model.dart';
 import 'package:shop_app/models/home_model/home_model.dart';
+import 'package:shop_app/modules/cart/cart.dart';
 import 'package:shop_app/shared/network/local/shared_preferences.dart';
 import 'package:shop_app/shared/network/remote/dio.dart';
-import '../../models/carts_model/carts_model.dart';
 import '../../models/category_model/category_model.dart';
 import '../../models/shop_model/shop_model.dart';
-import '../../modules/cart/cart.dart';
 import '../../modules/categories/categories.dart';
 import '../../modules/favorite/favorites.dart';
 import '../../modules/products/products.dart';
@@ -27,20 +23,20 @@ class ShopCubit extends Cubit<ShopStates> {
   ShopModel? userInfo;
   ShopModel? updateInfo;
   FavoritesModel? favModel;
-  CartsModel? cartModel;
+  FavoritesModel? cartModel;
   Map<int, bool> favourites = {};
   Map<int, bool> carts = {};
   CategoryModel? catModel;
 
   static ShopCubit get(context) => BlocProvider.of(context);
-  bool isDark = false;
   List<Widget> screens = [
     const ProductsScreen(),
     const CategoriesScreen(),
+    const CartScreen(),
     const FavoritesScreen(),
      SettingsScreen(),
   ];
-
+  bool isDark = false;
   void changeShopTheme({bool? fromShared}) {
     if (fromShared != null) {
       isDark = fromShared;
@@ -65,6 +61,7 @@ class ShopCubit extends Cubit<ShopStates> {
       model = HomeModelData.fromJson(value.data);
       for (var element in model!.data!.products) {
         favourites.addAll({element.id!: element.favorite!});
+        carts.addAll({element.id!:element.inCart!});
       }
       if (kDebugMode) {
         print(favourites.toString());
@@ -176,34 +173,13 @@ class ShopCubit extends Cubit<ShopStates> {
       }
     });
   }
-  File? selectedImage ;
-  Future pickImage(ImageSource source) async {
-    try{
-      final image = await ImagePicker().pickImage(source: source);
-      if (image ==null){
-        return;
-      }
-      else{
-        File? img =File(image.path);
-        selectedImage = img;
-        emit((ChangeImageSuccessState()));
-      }
-    } catch(e){
-      if (kDebugMode) {
-        print(e.toString());
-      }
-      emit((ChangeImageErrorState()));
-    }
-
-  }
-
   void changeCartsState(int productId) {
-    // carts[productId] = !carts[productId]!;
-    // emit(ShopChangeCartsSuccessState());
+     carts[productId] = carts[productId]!;
+    emit(ShopChangeCartsSuccessState());
     DioHelper.postData(
         url: cart, data: {'product_id': productId}, token: token)
         .then((value) {
-      cartModel = CartsModel.fromJson(value.data);
+      cartModel = FavoritesModel.fromJson(value.data);
       if (catModel?.status != null) {
         carts[productId] != carts[productId];
       }
@@ -226,11 +202,10 @@ class ShopCubit extends Cubit<ShopStates> {
   }
   void getCartsItems() {
     emit(ShopCartsLoadingState());
-    DioHelper.getData(url: favorites, token: token).then((value) {
-      cartModel = CartsModel.fromJson(value.data);
+    DioHelper.getData(url: cart, token: token).then((value) {
+      cartModel = FavoritesModel.fromJson(value.data);
 
       emit(ShopCartsSuccessState());
-      print(cartModel!.data?.id);
     }).catchError((error) {
       emit(ShopCartsErrorState());
     });

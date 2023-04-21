@@ -1,15 +1,16 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shop_app/app_constance/strings_manager.dart';
 import 'package:shop_app/modules/search_screen/search_cubit/cubit.dart';
 import 'package:shop_app/modules/search_screen/search_cubit/states.dart';
 import 'package:shop_app/shared/components/components.dart';
 
 import '../../shared/cubit/app_cubit.dart';
-import '../../style/colors.dart';
 import '../products/products_details/product_details.dart';
 
 class SearchScreen extends StatelessWidget {
-  var searchController = TextEditingController();
+  final searchController = TextEditingController();
 
   SearchScreen({super.key});
 
@@ -33,28 +34,15 @@ class SearchScreen extends StatelessWidget {
                     height: 10,
                   ),
                   defaultTextFormField(
-                      textColor: ShopCubit.get(context).isDark
-                          ? darkPrimaryColor
-                          : Colors.white,
-                      borderColor: ShopCubit.get(context).isDark
-                          ? darkPrimaryColor
-                          : Colors.white,
-                      color: ShopCubit.get(context).isDark
-                          ? darkPrimaryColor
-                          : Colors.white,
+                      context: context,
                       prefix: Icons.search,
                       controller: searchController,
-                      validate: (String? value) {
-                        if (value!.isEmpty) {
-                          return 'write what you search for';
-                        }
-                        return null;
-                      },
+                      validate: (String? value) {},
                       onSubmit: (value) {
                         SearchCubit.get(context)
                             .getSearch(text: searchController.text);
                       },
-                      label: 'Search', function: () {  } ),
+                      label: AppStrings.search.tr()),
                   const SizedBox(
                     height: 10,
                   ),
@@ -105,13 +93,27 @@ class SearchScreen extends StatelessWidget {
                                           const SizedBox(
                                             width: 15,
                                           ),
-                                          Text(
-                                            'EGP ${cubit.model!.data!.data[index].price.toString()}',
-                                            maxLines: 1,
-                                            style: const TextStyle(
-                                                height: 1.8,
-                                                fontSize: 14,
-                                                color: Colors.black),
+                                          Expanded(
+                                            child: Column(
+                                              children: [
+                                                Expanded(
+                                                    child: Text(
+                                                  cubit.model!.data!.data[index]
+                                                      .name!,
+                                                  maxLines: 2,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                )),
+                                                Text(
+                                                  'EGP ${cubit.model!.data!.data[index].price.toString()}',
+                                                  maxLines: 1,
+                                                  style: const TextStyle(
+                                                      height: 1.8,
+                                                      fontSize: 14,
+                                                      color: Colors.black),
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                           const Spacer(),
                                           IconButton(
@@ -119,12 +121,17 @@ class SearchScreen extends StatelessWidget {
                                             icon: CircleAvatar(
                                               backgroundColor: Colors.grey[200],
                                               child: Icon(
-                                                ShopCubit.get(context).favourites[
-                                                cubit.model!.data!.data[index].id!]!
+                                                ShopCubit.get(context)
+                                                            .favourites[
+                                                        cubit.model!.data!
+                                                            .data[index].id!]!
                                                     ? Icons.favorite
                                                     : Icons.favorite_border,
                                                 color: Colors.red,
-                                                size: MediaQuery.of(context).size.width * 0.06,
+                                                size: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.06,
                                               ),
                                             ),
                                           )

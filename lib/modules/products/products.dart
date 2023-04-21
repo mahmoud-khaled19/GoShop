@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_app/models/home_model/home_model.dart';
@@ -7,7 +8,7 @@ import 'package:shop_app/modules/products/products_details/product_details.dart'
 import 'package:shop_app/shared/components/components.dart';
 import 'package:shop_app/shared/cubit/app_cubit.dart';
 import 'package:shop_app/shared/cubit/app_states.dart';
-import '../../style/colors.dart';
+import '../../app_constance/strings_manager.dart';
 
 class ProductsScreen extends StatelessWidget {
   const ProductsScreen({Key? key}) : super(key: key);
@@ -29,7 +30,8 @@ class ProductsScreen extends StatelessWidget {
   }
 }
 
-Widget productsBuilder(HomeModelData model, context) => SingleChildScrollView(
+Widget productsBuilder(HomeModelData model, context) =>
+    SingleChildScrollView(
   physics: const BouncingScrollPhysics(),
   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
     CarouselSlider(
@@ -46,15 +48,16 @@ Widget productsBuilder(HomeModelData model, context) => SingleChildScrollView(
             viewportFraction: 1,
             scrollDirection: Axis.horizontal,
             autoPlayAnimationDuration: const Duration(seconds: 4),
-            autoPlayCurve: Curves.fastOutSlowIn)),
+            autoPlayCurve: Curves.fastOutSlowIn)
+    ),
     const SizedBox(
       height: 20,
     ),
-    const Padding(
-      padding: EdgeInsets.only(left: 10),
+     Padding(
+      padding:const EdgeInsets.only(left: 10),
       child: Text(
-        'New Products',
-        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        AppStrings.newProducts.tr(),
+        style: Theme.of(context).textTheme.titleLarge,
       ),
     ),
     const SizedBox(
@@ -91,7 +94,7 @@ Widget productItem(ProductsModel model, context) =>
                   ProductDetails(
                     image: model.image!,
                     id: model.id,
-                    price: 'Price : ${model.price.round()}',
+                    price: '${AppStrings.price} : ${model.price.round()}',
                     description: model.description!,
                     name: model.name!,
                   ));
@@ -136,7 +139,7 @@ Widget productItem(ProductsModel model, context) =>
                         ),
 
                         padding: const EdgeInsets.symmetric(horizontal: 8),
-                        child: const Text('Discount',style: TextStyle(
+                        child:  Text(AppStrings.discount.tr(),style: const TextStyle(
                             color: Colors.white
                         ),),
                       )
@@ -151,9 +154,7 @@ Widget productItem(ProductsModel model, context) =>
                           Text(
                             'Egp ${model.price.round()}',
                             maxLines: 1,
-                            style: TextStyle(
-                                fontSize: 14, color: model.discount != 0?
-                            lightPrimaryColor:Colors.black),
+                            style: Theme.of(context).textTheme.titleSmall,
                           ),
                           const SizedBox(width: 8),
                           if (model.discount != 0)

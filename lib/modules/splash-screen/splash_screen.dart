@@ -1,10 +1,10 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:hexcolor/hexcolor.dart';
+import 'package:shop_app/app_constance/strings_manager.dart';
 import 'package:shop_app/layout/shop_layout.dart';
-import 'package:shop_app/modules/boarding_screen/boarding-screen.dart';
+import 'package:shop_app/modules/login%20screen/shop_login.dart';
 import 'package:shop_app/shared/components/constants.dart';
-import 'package:shop_app/style/colors.dart';
 class SplashScreen extends StatelessWidget {
   const SplashScreen({Key? key}) : super(key: key);
 
@@ -14,10 +14,10 @@ class SplashScreen extends StatelessWidget {
       splashIconSize: MediaQuery.of(context).size.height * .5,
       duration: 3000,
       splashTransition: SplashTransition.fadeTransition,
-      backgroundColor: HexColor('#F2F3F4'),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       nextScreen:
       token != null?
-      const ShopLayout() : const ShopAppBoardingScreen(),
+      const ShopLayout() :const ShopAppLoginScreen(),
       splash: Column(
         children: [
           const Center(
@@ -26,12 +26,8 @@ class SplashScreen extends StatelessWidget {
             height: 25,
           ),
           Text(
-            'K0oOta Shop',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color:darkPrimaryColor,
-            ),
+            AppStrings.appTitle.tr(),
+            style: Theme.of(context).textTheme.titleMedium,
           )
         ],
       ),

@@ -1,5 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shop_app/app_constance/strings_manager.dart';
+import 'package:shop_app/app_constance/theme_manager.dart';
 import 'package:shop_app/layout/shop_layout.dart';
 import 'package:shop_app/modules/login%20screen/shop_login.dart';
 import 'package:shop_app/modules/splash-screen/splash_screen.dart';
@@ -9,54 +12,76 @@ import 'package:shop_app/shared/cubit/app_cubit.dart';
 import 'package:shop_app/shared/cubit/bloc%20observer.dart';
 import 'package:shop_app/shared/network/local/shared_preferences.dart';
 import 'package:shop_app/shared/network/remote/dio.dart';
-import 'package:shop_app/style/themes.dart';
-import 'modules/boarding_screen/boarding-screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
   Bloc.observer = MyBlocObserver();
   DioHelper.init();
   await CacheHelper.init();
-  bool? onBoarding = CacheHelper.getData(key: 'onBoarding');
-  bool? isDark = CacheHelper.getData(key: 'isDark');
+  bool isDark = CacheHelper.getData(key: 'isDark');
   token = CacheHelper.getData(key: 'token');
-  print(token);
   Widget widget;
-  if (onBoarding != null) {
-    if (token == null) {
-      widget = const ShopAppLoginScreen();
-    } else {
-      widget = const ShopLayout();
-    }
+  if (token == null) {
+    widget = const ShopAppLoginScreen();
   } else {
-    widget = const ShopAppBoardingScreen();
+    widget = const ShopLayout();
   }
-  runApp(MyApp(isDark, widget));
+  runApp(EasyLocalization(
+    useOnlyLangCode: true,
+    saveLocale: true,
+    supportedLocales: const [
+      Locale(
+        'en',
+      ),
+      Locale(
+        'ar',
+      ),
+    ],
+    fallbackLocale: const Locale('ar'),
+    path: 'assets/translations',
+    child: MyApp(isDark, widget),
+  ));
 }
 
 class MyApp extends StatelessWidget {
   final Widget widget;
-  final bool? isDark;
-  const MyApp(
-      this.isDark,
-      this.widget, {super.key});
+  final bool isDark;
+
+  const MyApp(this.isDark, this.widget, {super.key});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (BuildContext context) => ShopCubit()..homeModel()..changeShopTheme(fromShared: isDark)
-          ..categoryModel()..getFavoritesItems()..getUserdata()..getCartsItems(),
+        create: (BuildContext context) => ShopCubit()
+          ..homeModel()
+          ..changeShopTheme(fromShared: isDark)
+          ..categoryModel()
+          ..getFavoritesItems()
+          ..getUserdata()
+          ..getCartsItems(),
         child: BlocConsumer<ShopCubit, ShopStates>(
           listener: (context, state) {},
           builder: (context, state) {
             return MaterialApp(
-              title: 'KOoOta_Shop',
+              supportedLocales: context.supportedLocales,
+              localizationsDelegates: context.localizationDelegates,
+              locale: context.locale,
+              localeResolutionCallback: (deviceLocale, supportLocales) {
+                for (var locale in supportLocales) {
+                  if (deviceLocale != null &&
+                      deviceLocale.languageCode == locale.languageCode) {
+                    return deviceLocale;
+                  }
+                }
+              },
+              title: AppStrings.appTitle.tr(),
               debugShowCheckedModeBanner: false,
-              theme: lightMode,
-              darkTheme: darkMode,
-              themeMode: ShopCubit.get(context).isDark? ThemeMode.light :ThemeMode.dark,
-              home:  const SplashScreen(),
+              theme: ShopCubit.get(context).isDark
+                  ? getLightApplicationTheme()
+                  : getDarkApplicationTheme(),
+              home: const SplashScreen(),
             );
           },
         ));

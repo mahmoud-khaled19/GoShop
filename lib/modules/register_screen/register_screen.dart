@@ -1,11 +1,12 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shop_app/app_constance/strings_manager.dart';
 import 'package:shop_app/modules/login%20screen/shop_login.dart';
 import 'package:shop_app/modules/register_screen/register_cubit/register_app_states.dart';
 import 'package:shop_app/modules/register_screen/register_cubit/register_cubit.dart';
 import '../../shared/components/components.dart';
-import '../../shared/cubit/app_cubit.dart';
-import '../../style/colors.dart';
+
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({Key? key}) : super(key: key);
 
@@ -22,7 +23,7 @@ class RegisterScreen extends StatelessWidget {
         listener: (context, state) {
           if (state is RegisterSuccessState) {
             if (state.model.status!) {
-              navigateAndFinish(context,  ShopAppLoginScreen());
+              navigateAndFinish(context, const ShopAppLoginScreen());
               defaultToast(text: state.model.message!, color: Colors.green);
             } else {
               defaultToast(text: state.model.message!, color: Colors.red);
@@ -44,91 +45,68 @@ class RegisterScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Register',
-                        style: Theme.of(context).textTheme.headline5?.copyWith(
-                           color: ShopCubit.get(context).isDark ? darkPrimaryColor
-                                : Colors.blue, fontWeight: FontWeight.bold),
+                        AppStrings.register.tr(),
+                        style: Theme.of(context).textTheme.headlineLarge,
                       ),
                       const SizedBox(
                         height: 50,
                       ),
                       defaultTextFormField(
-                          borderColor:  ShopCubit.get(context).isDark
-                              ? lightPrimaryColor
-                              : Colors.white,
-                          color: ShopCubit.get(context).isDark? Colors.white:Colors.red,
-                          validate: (String? value) {
-                            if (value!.isEmpty) {
-                              return 'Write your Name';
-                            } else {
-                              return null;
-                            }
-                          },
-                          type: TextInputType.text,
-                          isSecure: false,
-                          controller: nameController,
-                          prefix: Icons.person,
-                          label: 'Name',
-                          function: () {}),
-                      const SizedBox(
-                        height: 20,
+                        context: context,
+                        validate: (String? value) {
+                          if (value!.isEmpty) {
+                            return AppStrings.validateName.tr();
+                          } else {
+                            return null;
+                          }
+                        },
+                        type: TextInputType.text,
+                        isSecure: false,
+                        controller: nameController,
+                        prefix: Icons.person,
+                        label: AppStrings.nameLabel.tr(),
                       ),
                       defaultTextFormField(
-                          borderColor:  ShopCubit.get(context).isDark
-                              ? lightPrimaryColor
-                              : Colors.white,
-                          color: ShopCubit.get(context).isDark? Colors.white:Colors.red,
+                        context: context,
+                        validate: (String? value) {
+                          if (value!.isEmpty) {
+                            return AppStrings.validatePhone.tr();
+                          } else {
+                            return null;
+                          }
+                        },
+                        type: TextInputType.phone,
+                        isSecure: false,
+                        controller: phoneController,
+                        prefix: Icons.phone_android,
+                        label: AppStrings.phoneLabel.tr(),
+                      ),
+                      defaultTextFormField(
+                        context: context,
+                        validate: (String? value) {
+                          if (value!.isEmpty) {
+                            return AppStrings.validateEmail.tr();
+                          } else {
+                            return null;
+                          }
+                        },
+                        type: TextInputType.emailAddress,
+                        isSecure: false,
+                        controller: emailController,
+                        prefix: Icons.email_outlined,
+                        label: AppStrings.emailLabel.tr(),
+                      ),
+                      defaultTextFormField(
+                          context: context,
                           validate: (String? value) {
                             if (value!.isEmpty) {
-                              return 'Write your Phone';
+                              return AppStrings.validatePassword.tr();
                             } else {
                               return null;
                             }
                           },
                           type: TextInputType.phone,
-                          isSecure: false,
-                          controller: phoneController,
-                          prefix: Icons.phone_android,
-                          label: 'phone ',
-                          function: () {}),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      defaultTextFormField(
-                          borderColor:  ShopCubit.get(context).isDark
-                              ? lightPrimaryColor
-                              : Colors.white,
-                          color: ShopCubit.get(context).isDark? Colors.white:Colors.red,
-                          validate: (String? value) {
-                            if (value!.isEmpty) {
-                              return 'Write your email';
-                            } else {
-                              return null;
-                            }
-                          },
-                          type: TextInputType.emailAddress,
-                          isSecure: false,
-                          controller: emailController,
-                          prefix: Icons.email_outlined,
-                          label: 'email ',
-                          function: () {}),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      defaultTextFormField(
-                        borderColor:  ShopCubit.get(context).isDark
-                            ? lightPrimaryColor
-                            : Colors.white,
-                          color: ShopCubit.get(context).isDark? Colors.white:Colors.red,
-                          validate: (String? value) {
-                            if (value!.isEmpty) {
-                              return 'Write your password';
-                            } else {
-                              return null;
-                            }
-                          },
-                          type: TextInputType.phone,
-                          label: 'password ',
+                          label: AppStrings.passwordLabel.tr(),
                           isSecure: RegisterCubit.get(context).visible == false
                               ? false
                               : true,
@@ -145,10 +123,11 @@ class RegisterScreen extends StatelessWidget {
                       ),
                       Visibility(
                         replacement:
-                        const Center(child: CircularProgressIndicator()),
+                            const Center(child: CircularProgressIndicator()),
                         visible: state is! RegisterLoadingState,
                         child: defaultElvButton(
-                            text: 'Register',
+                            context: context,
+                            text: AppStrings.register.tr(),
                             function: () {
                               if (formKey.currentState!.validate()) {
                                 RegisterCubit.get(context).userRegister(

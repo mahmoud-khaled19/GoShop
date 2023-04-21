@@ -21,13 +21,11 @@ class ProductDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ShopCubit, ShopStates>(
-      listener: (BuildContext context, Object? state) {
-      },
+      listener: (BuildContext context, Object? state) {},
       builder: (BuildContext context, state) {
         ShopCubit cubit = BlocProvider.of(context);
         return Scaffold(
-          appBar: AppBar(
-          ),
+          appBar: AppBar(),
           body: Column(
             children: [
               Expanded(
@@ -69,7 +67,7 @@ class ProductDetails extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         height: 40,
-                        color: Colors.grey[200],
+                        color: Theme.of(context).primaryColor,
                         child: InkWell(
                           onTap: () {
                             cubit.changeFavoriteState(id);
@@ -85,19 +83,19 @@ class ProductDetails extends StatelessWidget {
                       ),
                       Expanded(
                           child: InkWell(
-                            onTap: (){
-                              cubit.changeCartsState(id);
-                            },
-                            child: Container(
-                                color: Colors.black,
-                                height: 40,
-                                child:  Center(
-                                    child:const Text(
-                                      'Add To Bag',
-                                      style: TextStyle(
-                                          fontSize: 14, color: Colors.white),
-                                    ) )   ),
-                          ))
+                        onTap: () {
+                          cubit.changeCartsState(id);
+                        },
+                        child: Container(
+                            color: Theme.of(context).splashColor,
+                            height: 40,
+                            child: const Center(
+                                child: Text(
+                              'Add To Bag',
+                              style:
+                                  TextStyle(fontSize: 14, color: Colors.white),
+                            ))),
+                      ))
                     ],
                   ))
             ],
