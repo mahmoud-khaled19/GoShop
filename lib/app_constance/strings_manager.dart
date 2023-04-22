@@ -29,5 +29,10 @@ class AppStrings {
   static const String validateName = "validate_Name";
   static const String validatePassword = "validate_password";
   static const String loginMessage = "login_Message";
+  static const String addToBag = "add_to_bag";
+  static const String inYourBag = "bagged_already";
+  static const String noCarts = 'No Items Bagged Yet!';
+
+
 //مراجعه كل القيم من الاول واعمل بادينج علشان العربي بيضرب
 }

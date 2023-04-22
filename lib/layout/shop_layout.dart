@@ -24,10 +24,10 @@ class ShopLayout extends StatelessWidget {
             actions: [
               IconButton(icon:const Icon(Icons.compare_arrows), onPressed: () {
                 WidgetsFlutterBinding.ensureInitialized();
-                cubit.homeModel();
-                cubit.categoryModel();
-                cubit.getFavoritesItems();
-                cubit.getUserdata();
+                // cubit.homeModel();
+                // cubit.categoryModel();
+                // cubit.getFavoritesItems();
+                // cubit.getUserdata();
               },),
               IconButton(icon:const Icon(Icons.search), onPressed: () {
                 navigateTo(context,  SearchScreen());

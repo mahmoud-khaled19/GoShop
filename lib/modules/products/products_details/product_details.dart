@@ -1,6 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_app/shared/cubit/app_states.dart';
+import '../../../app_constance/strings_manager.dart';
 import '../../../shared/cubit/app_cubit.dart';
 
 class ProductDetails extends StatelessWidget {
@@ -66,8 +68,9 @@ class ProductDetails extends StatelessWidget {
                     children: [
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
+                        margin: const EdgeInsets.symmetric(horizontal: 5),
                         height: 40,
-                        color: Theme.of(context).primaryColor,
+                        color: Theme.of(context).splashColor,
                         child: InkWell(
                           onTap: () {
                             cubit.changeFavoriteState(id);
@@ -84,16 +87,17 @@ class ProductDetails extends StatelessWidget {
                       Expanded(
                           child: InkWell(
                         onTap: () {
-                          cubit.changeCartsState(id);
+                          ShopCubit.get(context).changeCartsState(id);
                         },
                         child: Container(
                             color: Theme.of(context).splashColor,
                             height: 40,
-                            child: const Center(
+                            child: Center(
                                 child: Text(
-                              'Add To Bag',
-                              style:
-                                  TextStyle(fontSize: 14, color: Colors.white),
+                              cubit.carts[id]!
+                                  ? AppStrings.inYourBag.tr()
+                                  : AppStrings.addToBag.tr(),
+                              style: Theme.of(context).textTheme.titleMedium,
                             ))),
                       ))
                     ],

@@ -24,5 +24,7 @@
   "validate_Email": "Enter your Email",
   "validate_Name": "Write your Name",
   "validate_password": "Enter your Password",
-  "login_Message": "Login To Koota Shop and Browse our Offers"
+  "login_Message": "Login To Koota Shop and Browse our Offers",
+  "add_to_bag": "Add To Bag",
+  "bagged_already": "Bagged Already"
 }

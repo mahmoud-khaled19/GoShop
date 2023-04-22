@@ -1,9 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shop_app/models/carts_model/carts_model.dart';
 import 'package:shop_app/models/favorite_model/favorites_model.dart';
 import 'package:shop_app/models/home_model/home_model.dart';
-import 'package:shop_app/modules/cart/cart.dart';
+import 'package:shop_app/modules/cart/cart_screen.dart';
 import 'package:shop_app/shared/network/local/shared_preferences.dart';
 import 'package:shop_app/shared/network/remote/dio.dart';
 import '../../models/category_model/category_model.dart';
@@ -23,7 +24,7 @@ class ShopCubit extends Cubit<ShopStates> {
   ShopModel? userInfo;
   ShopModel? updateInfo;
   FavoritesModel? favModel;
-  FavoritesModel? cartModel;
+  CartsModel? cartModel;
   Map<int, bool> favourites = {};
   Map<int, bool> carts = {};
   CategoryModel? catModel;
@@ -32,11 +33,12 @@ class ShopCubit extends Cubit<ShopStates> {
   List<Widget> screens = [
     const ProductsScreen(),
     const CategoriesScreen(),
-    const CartScreen(),
     const FavoritesScreen(),
-     SettingsScreen(),
+    const CartScreen(),
+    SettingsScreen(),
   ];
   bool isDark = false;
+
   void changeShopTheme({bool? fromShared}) {
     if (fromShared != null) {
       isDark = fromShared;
@@ -61,10 +63,7 @@ class ShopCubit extends Cubit<ShopStates> {
       model = HomeModelData.fromJson(value.data);
       for (var element in model!.data!.products) {
         favourites.addAll({element.id!: element.favorite!});
-        carts.addAll({element.id!:element.inCart!});
-      }
-      if (kDebugMode) {
-        print(favourites.toString());
+        carts.addAll({element.id!: element.inCart!});
       }
       emit(ShopHomeSuccessState());
     }).catchError((error) {
@@ -90,6 +89,7 @@ class ShopCubit extends Cubit<ShopStates> {
       }
     });
   }
+
   void changeFavoriteState(int productId) {
     favourites[productId] = !favourites[productId]!;
     emit(ShopChangeFavoritesSuccessState());
@@ -116,9 +116,6 @@ class ShopCubit extends Cubit<ShopStates> {
         defaultToast(
             text: 'تم حذف المنتج من قائمة التفضيلات ', color: Colors.yellow);
       }
-    } else {
-      defaultToast(
-          text: 'غير مصرح لك يرجي تسجيل الدخول من جديد', color: Colors.red);
     }
   }
 
@@ -144,7 +141,6 @@ class ShopCubit extends Cubit<ShopStates> {
       emit(ShopUserDataErrorState());
       if (kDebugMode) {
         print(error.toString());
-        print('Name Of The error');
       }
     });
   }
@@ -169,45 +165,43 @@ class ShopCubit extends Cubit<ShopStates> {
       emit(ShopUpdateUserinfoErrorState());
       if (kDebugMode) {
         print(error.toString());
-        print('Name Of The error');
       }
     });
   }
+
   void changeCartsState(int productId) {
-     carts[productId] = carts[productId]!;
+    carts[productId] = !carts[productId]!;
     emit(ShopChangeCartsSuccessState());
-    DioHelper.postData(
-        url: cart, data: {'product_id': productId}, token: token)
+    DioHelper.postData(url: cart, data: {'product_id': productId}, token: token)
         .then((value) {
-      cartModel = FavoritesModel.fromJson(value.data);
-      if (catModel?.status != null) {
-        carts[productId] != carts[productId];
+      cartModel = CartsModel.fromJson(value.data);
+      if (catModel?.status == false) {
+        carts[productId] = !carts[productId]!;
       }
       getCartsItems();
       emit(ShopChangeCartsSuccessState());
     }).catchError((error) {
-      if (catModel?.status != null) {
-        carts[productId] !=  carts[productId]!;
-      }
+      carts[productId] = !carts[productId]!;
       emit(ShopChangeCartsErrorState());
     });
 
-      if (carts[productId]!) {
-        defaultToast(
-            text: 'تم إضافه المنتج إلي الشنطه', color: Colors.green);
-      } else {
-        defaultToast(
-            text: 'تم حذف المنتج من الشنطه ', color: Colors.yellow);
+    if (carts[productId]!) {
+      defaultToast(text: 'تم إضافه المنتج إلي الشنطه', color: Colors.green);
+    } else {
+      defaultToast(text: 'تم حذف المنتج من الشنطه ', color: Colors.yellow);
     }
   }
+
   void getCartsItems() {
     emit(ShopCartsLoadingState());
     DioHelper.getData(url: cart, token: token).then((value) {
-      cartModel = FavoritesModel.fromJson(value.data);
+      cartModel = CartsModel.fromJson(value.data);
 
+      print(carts);
       emit(ShopCartsSuccessState());
     }).catchError((error) {
       emit(ShopCartsErrorState());
+      print(error.toString());
     });
   }
 }

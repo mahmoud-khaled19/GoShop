@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:shop_app/app_constance/strings_manager.dart';
 
 class LocalizationTheme extends StatefulWidget {
   const LocalizationTheme({Key? key}) : super(key: key);
@@ -9,12 +10,12 @@ class LocalizationTheme extends StatefulWidget {
 }
 
 class _HomeState extends State<LocalizationTheme> {
-  String? value = 'arabic';
+  String? value = AppStrings.arabic;
 
   @override
   Widget build(BuildContext context) {
     final languages = [
-      'arabic',
+      AppStrings.arabic,
       'english',
     ];
     return Padding(
@@ -24,11 +25,11 @@ class _HomeState extends State<LocalizationTheme> {
           value: value,
           isExpanded: true,
           iconSize: 30,
-          icon: const Icon(Icons.arrow_drop_down, color: Colors.black),
+          icon:  Icon(Icons.arrow_drop_down, color: Theme.of(context).splashColor),
           items: languages.map(buildMenuLanguages).toList(),
           onChanged: (value) => setState(() {
             this.value = value;
-            if (value == 'arabic') {
+            if (value ==  AppStrings.arabic) {
               context.setLocale(const Locale('ar'));
             } else {
               context.setLocale(const Locale('en'));

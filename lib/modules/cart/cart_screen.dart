@@ -1,5 +1,4 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_app/shared/cubit/app_cubit.dart';
@@ -20,7 +19,7 @@ class CartScreen extends StatelessWidget {
         return ConditionalBuilder(
             condition: state is! ShopFavoritesLoadingState,
             builder: (BuildContext context) {
-              return cubit.favourites.isEmpty
+              return cubit.carts.isNotEmpty
                   ? Container(
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
@@ -33,14 +32,14 @@ class CartScreen extends StatelessWidget {
                         mainAxisSpacing: 3,
                         crossAxisSpacing: 3,
                         children: List.generate(
-                            cubit.favModel!.data!.data.length,
+                            cubit.cartModel!.data!.cartItems!.length,
                             (index) => favoriteItem(
-                                context, cubit.favModel!.data!.data[index])),
+                                context, cubit.cartModel!.data!.cartItems![index])),
                       ),
                     )
                   : Center(
                       child: Text(
-                      AppStrings.noFav.tr(),
+                      AppStrings.noCarts,
                       style: Theme.of(context).textTheme.titleLarge,
                     ));
             },

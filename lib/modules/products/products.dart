@@ -68,7 +68,7 @@ Widget productsBuilder(HomeModelData model, context) =>
       child: GridView.count(
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
-          childAspectRatio: 1 / 1.44,
+          childAspectRatio: 1 / 1.43,
           crossAxisSpacing: 2,
           mainAxisSpacing: 2,
           crossAxisCount: 2,
@@ -165,26 +165,6 @@ Widget productItem(ProductsModel model, context) =>
                                   decoration: TextDecoration.lineThrough,
                                   color: Colors.grey[600]),
                             ),
-                          // const Spacer(),
-                          // IconButton(
-                          //   onPressed: () {
-                          //     ShopCubit.get(context)
-                          //         .changeFavoriteState(model.id);
-                          //     if (kDebugMode) {
-                          //       print(model.id);
-                          //     }
-                          //   },
-                          //   icon: CircleAvatar(
-                          //     backgroundColor: Colors.grey[300],
-                          //     child: Icon(
-                          //       ShopCubit.get(context).favourites[model.id]!
-                          //           ? Icons.favorite
-                          //           : Icons.favorite_border,
-                          //       color: Colors.red,
-                          //       size: MediaQuery.of(context).size.width * 0.06,
-                          //     ),
-                          //   ),
-                          // )
                         ],
                       ),
                       const SizedBox(

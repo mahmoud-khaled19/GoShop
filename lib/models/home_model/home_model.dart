@@ -43,7 +43,7 @@ class ProductsModel {
 
   dynamic? oldPrice;
 
-  dynamic? discount;
+  dynamic discount;
 
   String? name;
 

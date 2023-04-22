@@ -20,7 +20,7 @@ class FavoritesScreen extends StatelessWidget {
         return ConditionalBuilder(
             condition: state is! ShopFavoritesLoadingState,
             builder: (BuildContext context) {
-              return cubit.favourites.isEmpty
+              return cubit.favourites.isNotEmpty
                   ? Container(
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
