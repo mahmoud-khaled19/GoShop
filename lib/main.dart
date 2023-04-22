@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_app/app_constance/strings_manager.dart';
 import 'package:shop_app/app_constance/theme_manager.dart';
-import 'package:shop_app/layout/shop_layout.dart';
-import 'package:shop_app/modules/login%20screen/shop_login.dart';
-import 'package:shop_app/modules/splash-screen/splash_screen.dart';
-import 'package:shop_app/shared/components/constants.dart';
-import 'package:shop_app/shared/cubit/app_states.dart';
-import 'package:shop_app/shared/cubit/app_cubit.dart';
-import 'package:shop_app/shared/cubit/bloc%20observer.dart';
-import 'package:shop_app/shared/network/local/shared_preferences.dart';
-import 'package:shop_app/shared/network/remote/dio.dart';
+import 'package:shop_app/view/auth/login%20screen/shop_login.dart';
+import 'package:shop_app/view/layout/shop_layout.dart';
+import 'package:shop_app/view/splash-screen/splash_screen.dart';
+import 'package:shop_app/view_model/cubit/app_cubit.dart';
+import 'package:shop_app/view_model/cubit/app_states.dart';
+import 'package:shop_app/view_model/cubit/bloc%20observer.dart';
+import 'package:shop_app/view_model/shared/components/constants.dart';
+import 'package:shop_app/view_model/shared/network/local/shared_preferences.dart';
+import 'package:shop_app/view_model/shared/network/remote/dio.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +19,7 @@ void main() async {
   Bloc.observer = MyBlocObserver();
   DioHelper.init();
   await CacheHelper.init();
-  bool isDark = CacheHelper.getData(key: 'isDark');
+  bool isDark = CacheHelper.getData(key: 'isDark')?? true;
   token = CacheHelper.getData(key: 'token');
   Widget widget;
   if (token == null) {
