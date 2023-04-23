@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shop_app/app_constance/api_constance.dart';
 import '../../../../models/shop_model/shop_model.dart';
-import '../../shared/network/end_points.dart';
 import '../../shared/network/remote/dio.dart';
 import 'login_app_states.dart';
 
@@ -22,7 +22,7 @@ class LoginCubit extends Cubit<LoginAppStates> {
     required String password,
   }) {
     emit(LoginLoadingState());
-    DioHelper.postData(url: login, data: {'email': email, 'password': password})
+    DioHelper.postData(url: ApiConstance.login, data: {'email': email, 'password': password})
         .then((value) {
       loginModel = ShopModel.fromJson(value.data);
       if (kDebugMode) {

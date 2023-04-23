@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_app/models/category_model/category_model.dart';
 
-import '../../view_model/cubit/app_cubit.dart';
-import '../../view_model/cubit/app_states.dart';
-
+import '../../../../view_model/cubit/app_cubit.dart';
+import '../../../../view_model/cubit/app_states.dart';
 class CategoriesScreen extends StatelessWidget {
   const CategoriesScreen({Key? key}) : super(key: key);
 

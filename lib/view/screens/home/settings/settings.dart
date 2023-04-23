@@ -1,14 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shop_app/app_constance/constants_methods.dart';
 import 'package:shop_app/app_constance/strings_manager.dart';
-import 'package:shop_app/view/settings/privacy_screen.dart';
-
-import '../../view_model/cubit/app_cubit.dart';
-import '../../view_model/cubit/app_states.dart';
-import '../../view_model/shared/components/components.dart';
-import '../../view_model/shared/components/constants.dart';
-import '../../view_model/shared/network/local/shared_preferences.dart';
+import 'package:shop_app/view/screens/home/settings/privacy_screen.dart';
+import '../../../../view_model/cubit/app_cubit.dart';
+import '../../../../view_model/cubit/app_states.dart';
+import '../../../widgets/widgets.dart';
 import 'about_me.dart';
 import 'language/localization.dart';
 
@@ -29,24 +27,25 @@ class SettingsScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                  CircleAvatar(
-                    radius: MediaQuery.of(context).size.height * 0.12,
-                    child: ClipOval(
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: double.infinity,
-                        child:  Image.network(
-                                "https://images.unsplash.com/photo-1502164980785-f8aa41d53611?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
-                                fit: BoxFit.cover,
-                              ),
+                CircleAvatar(
+                  radius: MediaQuery.of(context).size.height * 0.12,
+                  child: ClipOval(
+                    child: SizedBox(
+                      width: double.infinity,
+                      height: double.infinity,
+                      child: Image.network(
+                        "https://images.unsplash.com/photo-1502164980785-f8aa41d53611?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
+                        fit: BoxFit.cover,
                       ),
                     ),
                   ),
+                ),
                 SizedBox(height: size * 0.04),
-                settingItem(
+                listTileWidget(
                   context: context,
-                  text:
-                      cubit.isDark ? AppStrings.lightMode.tr() : AppStrings.darkMode.tr(),
+                  text: cubit.isDark
+                      ? AppStrings.lightMode.tr()
+                      : AppStrings.darkMode.tr(),
                   function: () {
                     cubit.changeShopTheme();
                   },
@@ -55,20 +54,20 @@ class SettingsScreen extends StatelessWidget {
                 SizedBox(height: size * 0.01),
                 const LocalizationTheme(),
                 SizedBox(height: size * 0.01),
-                settingItem(
+                listTileWidget(
                   context: context,
                   text: AppStrings.update.tr(),
                   function: () {
-                    navigateTo(context, PrivacyScreen());
+                    AppMethods.navigateTo(context, PrivacyScreen());
                   },
                   icon: Icons.privacy_tip_outlined,
                 ),
                 SizedBox(height: size * 0.01),
-                settingItem(
+                listTileWidget(
                   context: context,
                   text: AppStrings.aboutMe.tr(),
                   function: () {
-                    navigateTo(
+                    AppMethods.navigateTo(
                         context,
                         AboutMe(
                           name: ShopCubit.get(context).userInfo!.data!.name,
@@ -87,7 +86,8 @@ class SettingsScreen extends StatelessWidget {
                         width: size * 0.4,
                         text: AppStrings.signOut.tr(),
                         function: () {
-                          signOut(context);
+                          AppMethods.signOut(context);
+                          AppMethods.token = '';
                         }),
                   ],
                 )

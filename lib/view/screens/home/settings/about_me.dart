@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_app/app_constance/strings_manager.dart';
 
-import '../../view_model/cubit/app_cubit.dart';
-import '../../view_model/cubit/app_states.dart';
-
+import '../../../../view_model/cubit/app_cubit.dart';
+import '../../../../view_model/cubit/app_states.dart';
 class AboutMe extends StatelessWidget {
   final String? name;
   final String? phone;
@@ -18,7 +17,7 @@ class AboutMe extends StatelessWidget {
     double size = MediaQuery.of(context).size.height;
     return Scaffold(
         appBar: AppBar(
-          title: const Center(child: Text('About Me')),
+          title:  Center(child: Text('About Me', style: Theme.of(context).textTheme.titleMedium,)),
         ),
         body: BlocConsumer<ShopCubit, ShopStates>(
           listener: (context, state) {},

@@ -19,12 +19,13 @@ class ShopCategorySuccessState extends ShopStates {}
 class ShopCategoryErrorState extends ShopStates {}
 
 class ShopChangeFavoritesSuccessState extends ShopStates {}
+class ShopChangeFavoritesLoadingsState extends ShopStates {}
 
 class ShopChangeFavoritesErrorState extends ShopStates {}
 
 class ShopFavoritesSuccessState extends ShopStates {}
 
-class ShopFavoritesLoadingState extends ShopStates {}
+class ShopGetFavoritesLoadingState extends ShopStates {}
 
 class ShopFavoritesErrorState extends ShopStates {}
 

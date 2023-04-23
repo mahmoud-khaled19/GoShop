@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:shop_app/app_constance/style_manager.dart';
 import 'package:shop_app/app_constance/values_manager.dart';
 import 'colors_manager.dart';
@@ -21,8 +20,6 @@ ThemeData getLightApplicationTheme() {
         ColorsManager.lightIPrimaryColor,
       ))),
       appBarTheme: AppBarTheme(
-          titleTextStyle: GoogleFonts.lobster(
-              color: Colors.black, fontSize: AppSize.s18, letterSpacing: 0.6),
           backgroundColor: ColorsManager.lightScaffoldColor,
           elevation: 0,
           iconTheme: IconThemeData(color: ColorsManager.black)),
@@ -68,9 +65,7 @@ ThemeData getDarkApplicationTheme() {
       ))),
       appBarTheme: AppBarTheme(
           backgroundColor: ColorsManager.darkScaffoldColor,
-          elevation: 0,
-          titleTextStyle: GoogleFonts.lobster(
-              color: Colors.white, fontSize: AppSize.s18, letterSpacing: 0.6)),
+          elevation: 0,),
       colorScheme:
           ColorScheme.dark(background: ColorsManager.lightBackgroundColor),
       iconTheme:

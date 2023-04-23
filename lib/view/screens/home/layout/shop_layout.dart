@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_app/app_constance/strings_manager.dart';
 
-import '../../view_model/cubit/app_cubit.dart';
-import '../../view_model/cubit/app_states.dart';
-import '../../view_model/shared/components/components.dart';
-import '../search_screen/searchScreen.dart';
+import '../../../../app_constance/constants_methods.dart';
+import '../../../../view_model/cubit/app_cubit.dart';
+import '../../../../view_model/cubit/app_states.dart';
+import '../../../widgets/widgets.dart';
+import '../../search_screen/searchScreen.dart';
 
 class ShopLayout extends StatelessWidget {
   const ShopLayout({Key? key}) : super(key: key);
@@ -21,17 +22,18 @@ class ShopLayout extends StatelessWidget {
         ShopCubit cubit = BlocProvider.of(context);
         return Scaffold(
           appBar: AppBar(
-            title: Text(AppStrings.appTitle.tr()),
+            title: Text(AppStrings.appTitle.tr(),style:Theme.of(context).textTheme.titleMedium,),
             actions: [
               IconButton(icon:const Icon(Icons.compare_arrows), onPressed: () {
                 WidgetsFlutterBinding.ensureInitialized();
-                // cubit.homeModel();
-                // cubit.categoryModel();
-                // cubit.getFavoritesItems();
-                // cubit.getUserdata();
+                cubit.homeModel();
+                cubit.categoryModel();
+                cubit.getFavoritesItems();
+                cubit.getUserdata();
+                cubit.getCartsItems();
               },),
               IconButton(icon:const Icon(Icons.search), onPressed: () {
-                navigateTo(context,  SearchScreen());
+                AppMethods.navigateTo(context,  SearchScreen());
               },),
 
               const SizedBox(

@@ -1,6 +1,13 @@
 class ApiConstance {
-  static const basicApi = 'apiKey=b57d9b1784c443c7955c0941978f7b11';
-  static const basicUrl = 'https://newsapi.org';
-  static const String pathUrl =
-      'https://techcrunch.com/2022/06/17/marc-lores-food-delivery-startup-wonder-raises-350m-3-5b-valuation';
+  static const basicUrl = 'https://student.valuxapps.com/api/';
+  static const String login ='login' ;
+  static const String home ='home' ;
+  static const String category ='categories';
+  static const String favorites ='favorites' ;
+  static const String profile ='profile' ;
+  static const String register ='register' ;
+  static const String update ='update-profile' ;
+  static const String search ='products/search' ;
+  static const String cart ='carts' ;
+
 }

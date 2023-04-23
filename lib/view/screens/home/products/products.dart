@@ -3,12 +3,12 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shop_app/models/home_model/home_model.dart';
-import 'package:shop_app/view/products/products_details/product_details.dart';
-import '../../app_constance/strings_manager.dart';
-import '../../view_model/cubit/app_cubit.dart';
-import '../../view_model/cubit/app_states.dart';
-import '../../view_model/shared/components/components.dart';
+import 'package:shop_app/view/screens/home/products/products_details/product_details.dart';
+import '../../../../app_constance/constants_methods.dart';
+import '../../../../app_constance/strings_manager.dart';
+import '../../../../models/products_model/products_model.dart';
+import '../../../../view_model/cubit/app_cubit.dart';
+import '../../../../view_model/cubit/app_states.dart';
 
 class ProductsScreen extends StatelessWidget {
   const ProductsScreen({Key? key}) : super(key: key);
@@ -30,55 +30,53 @@ class ProductsScreen extends StatelessWidget {
   }
 }
 
-Widget productsBuilder(HomeModelData model, context) =>
-    SingleChildScrollView(
-  physics: const BouncingScrollPhysics(),
-  child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-    CarouselSlider(
-        items: model.data!.banners
-            .map((e) => Image(
-                  image: NetworkImage(e.image!),
-                  width: double.infinity,
-                  fit: BoxFit.fill,
-                  height: MediaQuery.of(context).size.height * 0.25,
-                ))
-            .toList(),
-        options: CarouselOptions(
-            autoPlay: true,
-            viewportFraction: 1,
-            scrollDirection: Axis.horizontal,
-            autoPlayAnimationDuration: const Duration(seconds: 4),
-            autoPlayCurve: Curves.fastOutSlowIn)
-    ),
-    const SizedBox(
-      height: 20,
-    ),
-     Padding(
-      padding:const EdgeInsets.only(left: 10),
-      child: Text(
-        AppStrings.newProducts.tr(),
-        style: Theme.of(context).textTheme.titleLarge,
-      ),
-    ),
-    const SizedBox(
-      height: 10,
-    ),
-    Container(
-      color: Colors.grey[100],
-      child: GridView.count(
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          childAspectRatio: 1 / 1.43,
-          crossAxisSpacing: 2,
-          mainAxisSpacing: 2,
-          crossAxisCount: 2,
-          children: List.generate(
-            model.data!.products.length,
-            (index) => productItem(model.data!.products[index], context),
-          )),
-    )
-  ]),
-);
+Widget productsBuilder(HomeModelData model, context) => SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        CarouselSlider(
+            items: model.data!.banners
+                .map((e) => Image(
+                      image: NetworkImage(e.image!),
+                      width: double.infinity,
+                      fit: BoxFit.fill,
+                      height: MediaQuery.of(context).size.height * 0.25,
+                    ))
+                .toList(),
+            options: CarouselOptions(
+                autoPlay: true,
+                viewportFraction: 1,
+                scrollDirection: Axis.horizontal,
+                autoPlayAnimationDuration: const Duration(seconds: 4),
+                autoPlayCurve: Curves.fastOutSlowIn)),
+        const SizedBox(
+          height: 20,
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 10),
+          child: Text(
+            AppStrings.newProducts.tr(),
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Container(
+          color: Colors.grey[100],
+          child: GridView.count(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              childAspectRatio: 1 / 1.43,
+              crossAxisSpacing: 2,
+              mainAxisSpacing: 2,
+              crossAxisCount: 2,
+              children: List.generate(
+                model.data!.products.length,
+                (index) => productItem(model.data!.products[index], context),
+              )),
+        )
+      ]),
+    );
 
 Widget productItem(ProductsModel model, context) =>
     BlocConsumer<ShopCubit, ShopStates>(
@@ -89,7 +87,7 @@ Widget productItem(ProductsModel model, context) =>
           padding: const EdgeInsets.all(5),
           child: InkWell(
             onTap: () {
-              navigateTo(
+              AppMethods.navigateTo(
                   context,
                   ProductDetails(
                     image: model.image!,
@@ -116,7 +114,8 @@ Widget productItem(ProductsModel model, context) =>
                         ),
                         IconButton(
                           onPressed: () {
-                            ShopCubit.get(context).changeFavoriteState(model.id!);
+                            ShopCubit.get(context)
+                                .changeFavoriteState(model.id!);
                           },
                           icon: CircleAvatar(
                             backgroundColor: Colors.grey[200],
@@ -131,17 +130,16 @@ Widget productItem(ProductsModel model, context) =>
                         )
                       ],
                     ),
-                    if(model.discount != 0)
+                    if (model.discount != 0)
                       Container(
                         decoration: BoxDecoration(
                             color: Colors.red,
-                            borderRadius: BorderRadius.circular(10)
-                        ),
-
+                            borderRadius: BorderRadius.circular(10)),
                         padding: const EdgeInsets.symmetric(horizontal: 8),
-                        child:  Text(AppStrings.discount.tr(),style: const TextStyle(
-                            color: Colors.white
-                        ),),
+                        child: Text(
+                          AppStrings.discount.tr(),
+                          style: const TextStyle(color: Colors.white),
+                        ),
                       )
                   ],
                 ),
@@ -190,5 +188,3 @@ Widget productItem(ProductsModel model, context) =>
         );
       },
     );
-
-

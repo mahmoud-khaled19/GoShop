@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 
+import 'package:flutter/material.dart';
 class AppSize {
   static const double s1 = 1.0;
   static const double s4 = 4.0;

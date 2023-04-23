@@ -2,28 +2,29 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_app/app_constance/strings_manager.dart';
-import '../../../view_model/cubit/register_cubit/register_app_states.dart';
-import '../../../view_model/cubit/register_cubit/register_cubit.dart';
-import '../../../view_model/shared/components/components.dart';
-import '../login screen/shop_login.dart';
+import '../../../../view_model/cubit/register_cubit/register_app_states.dart';
+import '../../../../view_model/cubit/register_cubit/register_cubit.dart';
+import '../../../widgets/widgets.dart';
 
 class RegisterScreen extends StatelessWidget {
-  const RegisterScreen({Key? key}) : super(key: key);
+   RegisterScreen({Key? key}) : super(key: key);
+  var formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    var formKey = GlobalKey<FormState>();
     var nameController = TextEditingController();
     var passController = TextEditingController();
     var phoneController = TextEditingController();
     var emailController = TextEditingController();
+    double size = MediaQuery.of(context).size.height;
+
     return BlocProvider(
       create: (BuildContext context) => RegisterCubit(),
       child: BlocConsumer<RegisterCubit, RegisterAppStates>(
         listener: (context, state) {
           if (state is RegisterSuccessState) {
             if (state.model.status!) {
-              navigateAndFinish(context, const ShopAppLoginScreen());
+             Navigator.pop(context);
               defaultToast(text: state.model.message!, color: Colors.green);
             } else {
               defaultToast(text: state.model.message!, color: Colors.red);
@@ -118,9 +119,10 @@ class RegisterScreen extends StatelessWidget {
                           function: () {
                             RegisterCubit.get(context).changePassVisibility();
                           }),
-                      const SizedBox(
-                        height: 40,
-                      ),
+                       SizedBox(
+                         height: size * 0.03,
+
+                       ),
                       Visibility(
                         replacement:
                             const Center(child: CircularProgressIndicator()),

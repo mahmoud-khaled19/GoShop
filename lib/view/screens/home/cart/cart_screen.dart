@@ -2,10 +2,11 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../app_constance/strings_manager.dart';
-import '../../view_model/cubit/app_cubit.dart';
-import '../../view_model/cubit/app_states.dart';
-import '../../view_model/shared/components/components.dart';
+import '../../../../app_constance/constants_methods.dart';
+import '../../../../app_constance/strings_manager.dart';
+import '../../../../view_model/cubit/app_cubit.dart';
+import '../../../../view_model/cubit/app_states.dart';
+import '../../../widgets/widgets.dart';
 import '../products/products_details/product_details.dart';
 
 class CartScreen extends StatelessWidget {
@@ -13,14 +14,16 @@ class CartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return BlocConsumer<ShopCubit, ShopStates>(
       listener: (context, state) {},
       builder: (context, state) {
         ShopCubit cubit = BlocProvider.of(context);
+        print(cubit.carts);
         return ConditionalBuilder(
-            condition: state is !ShopGetCartsLoadingState,
+            condition: state is ! ShopGetCartsLoadingState,
             builder: (BuildContext context) {
-              return cubit.carts.isNotEmpty
+              return cubit.carts.values.contains(true)
                   ? Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
@@ -40,7 +43,7 @@ class CartScreen extends StatelessWidget {
               )
                   : Center(
                   child: Text(
-                    AppStrings.noFav.tr(),
+                    AppStrings.noCarts.tr(),
                     style: Theme.of(context).textTheme.titleLarge,
                   ));
             },
@@ -57,7 +60,7 @@ Widget favoriteItem(context, model) => BlocConsumer<ShopCubit, ShopStates>(
   builder: (BuildContext context, state) {
     return GestureDetector(
       onTap: () {
-        navigateTo(
+        AppMethods.navigateTo(
             context,
             ProductDetails(
                 image: model.product!.image!,

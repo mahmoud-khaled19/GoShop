@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_app/models/register_model/register_model.dart';
 import 'package:shop_app/view_model/cubit/register_cubit/register_app_states.dart';
 
-import '../../shared/network/end_points.dart';
+import '../../../app_constance/api_constance.dart';
 import '../../shared/network/remote/dio.dart';
 
 class RegisterCubit extends Cubit<RegisterAppStates> {
@@ -27,7 +27,7 @@ class RegisterCubit extends Cubit<RegisterAppStates> {
   }) {
     emit(RegisterLoadingState());
     DioHelper.postData(
-        url: register,
+        url:ApiConstance.register,
         data: {
           'email': email, 'password': password,
           'name': name, 'phone': phone,

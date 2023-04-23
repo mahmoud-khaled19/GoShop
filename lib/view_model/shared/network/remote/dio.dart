@@ -1,11 +1,12 @@
 import 'package:dio/dio.dart';
+import 'package:shop_app/app_constance/api_constance.dart';
 
 class DioHelper {
   static Dio dio = Dio();
 
   static init() {
     dio = Dio(BaseOptions(
-      baseUrl: 'https://student.valuxapps.com/api/',
+      baseUrl: ApiConstance.basicUrl,
       receiveDataWhenStatusError: true,
     ));
   }

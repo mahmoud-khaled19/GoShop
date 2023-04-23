@@ -3,18 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_app/models/carts_model/carts_model.dart';
 import 'package:shop_app/models/favorite_model/favorites_model.dart';
-import 'package:shop_app/models/home_model/home_model.dart';
-
+import '../../app_constance/api_constance.dart';
+import '../../app_constance/constants_methods.dart';
 import '../../models/category_model/category_model.dart';
+import '../../models/products_model/products_model.dart';
 import '../../models/shop_model/shop_model.dart';
-import '../../view/cart/cart_screen.dart';
-import '../../view/categories/categories.dart';
-import '../../view/favorite/favorites.dart';
-import '../../view/products/products.dart';
-import '../../view/settings/settings.dart';
-import '../shared/components/components.dart';
-import '../shared/components/constants.dart';
-import '../shared/network/end_points.dart';
+import '../../view/screens/home/cart/cart_screen.dart';
+import '../../view/screens/home/categories/categories.dart';
+import '../../view/screens/home/favorite/favorites.dart';
+import '../../view/screens/home/products/products.dart';
+import '../../view/screens/home/settings/settings.dart';
+import '../../view/widgets/widgets.dart';
 import '../shared/network/local/shared_preferences.dart';
 import '../shared/network/remote/dio.dart';
 import 'app_states.dart';
@@ -29,6 +28,7 @@ class ShopCubit extends Cubit<ShopStates> {
   Map<int, bool> favourites = {};
   Map<int, bool> carts = {};
   CategoryModel? catModel;
+  List<FavoritesModel> testList = [];
 
   static ShopCubit get(context) => BlocProvider.of(context);
   List<Widget> screens = [
@@ -60,7 +60,8 @@ class ShopCubit extends Cubit<ShopStates> {
 
   void homeModel() {
     emit(ShopHomeLoadingState());
-    DioHelper.getData(url: home, token: token).then((value) {
+    DioHelper.getData(url: ApiConstance.home, token: AppMethods.token)
+        .then((value) {
       model = HomeModelData.fromJson(value.data);
       for (var element in model!.data!.products) {
         favourites.addAll({element.id!: element.favorite!});
@@ -76,7 +77,7 @@ class ShopCubit extends Cubit<ShopStates> {
   }
 
   void categoryModel() {
-    DioHelper.getData(url: category).then((value) {
+    DioHelper.getData(url: ApiConstance.category).then((value) {
       catModel = CategoryModel.fromJson(value.data);
 
       if (kDebugMode) {
@@ -95,7 +96,9 @@ class ShopCubit extends Cubit<ShopStates> {
     favourites[productId] = !favourites[productId]!;
     emit(ShopChangeFavoritesSuccessState());
     DioHelper.postData(
-            url: favorites, data: {'product_id': productId}, token: token)
+            url: ApiConstance.favorites,
+            data: {'product_id': productId},
+            token: AppMethods.token)
         .then((value) {
       favModel = FavoritesModel.fromJson(value.data);
       if (favModel?.status != null) {
@@ -121,8 +124,9 @@ class ShopCubit extends Cubit<ShopStates> {
   }
 
   void getFavoritesItems() {
-    emit(ShopFavoritesLoadingState());
-    DioHelper.getData(url: favorites, token: token).then((value) {
+    emit(ShopGetFavoritesLoadingState());
+    DioHelper.getData(url: ApiConstance.favorites, token: AppMethods.token)
+        .then((value) {
       favModel = FavoritesModel.fromJson(value.data);
       emit(ShopFavoritesSuccessState());
     }).catchError((error) {
@@ -132,7 +136,8 @@ class ShopCubit extends Cubit<ShopStates> {
 
   void getUserdata() {
     emit(ShopUserDataLoadingState());
-    DioHelper.getData(url: profile, token: token).then((value) {
+    DioHelper.getData(url: ApiConstance.profile, token: AppMethods.token)
+        .then((value) {
       userInfo = ShopModel.fromJson(value.data);
       if (kDebugMode) {
         print(userInfo!.data!.name);
@@ -152,7 +157,7 @@ class ShopCubit extends Cubit<ShopStates> {
     required String email,
   }) {
     emit(ShopUpdateUserinfoLoadingState());
-    DioHelper.putData(url: update, token: token, data: {
+    DioHelper.putData(url: ApiConstance.update, token: AppMethods.token, data: {
       'name': name,
       'phone': phone,
       'email': email,
@@ -173,13 +178,16 @@ class ShopCubit extends Cubit<ShopStates> {
   void changeCartsState(int productId) {
     carts[productId] = !carts[productId]!;
     emit(ShopChangeCartsSuccessState());
-    DioHelper.postData(url: cart, data: {'product_id': productId}, token: token)
+    DioHelper.postData(
+            url: ApiConstance.cart,
+            data: {'product_id': productId},
+            token: AppMethods.token)
         .then((value) {
       cartModel = CartsModel.fromJson(value.data);
       if (catModel?.status == false) {
         carts[productId] = !carts[productId]!;
       }
-      getCartsItems();
+
       emit(ShopChangeCartsSuccessState());
     }).catchError((error) {
       carts[productId] = !carts[productId]!;
@@ -191,14 +199,28 @@ class ShopCubit extends Cubit<ShopStates> {
     } else {
       defaultToast(text: 'تم حذف المنتج من الشنطه ', color: Colors.yellow);
     }
+    getCartsItems();
   }
 
-  void getCartsItems() {
+  Future<List<FavoritesModel>> testFavItems() async {
+    emit(ShopGetFavoritesLoadingState());
+    testList = await DioHelper.getData(
+            url: ApiConstance.favorites, token: AppMethods.token)
+        .then((value) {
+      favModel = FavoritesModel.fromJson(value.data);
+
+      emit(ShopChangeFavoritesSuccessState());
+      throw ('');
+    });
+    return testList;
+  }
+
+  Future<void> getCartsItems() async {
     emit(ShopGetCartsLoadingState());
-    DioHelper.getData(url: cart, token: token).then((value) {
+    await DioHelper.getData(url: ApiConstance.cart, token: AppMethods.token)
+        .then((value) {
       cartModel = CartsModel.fromJson(value.data);
 
-      print(carts);
       emit(ShopGetCartsSuccessState());
     }).catchError((error) {
       emit(ShopGetCartsErrorState());

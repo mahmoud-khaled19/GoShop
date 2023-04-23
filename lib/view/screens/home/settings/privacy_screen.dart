@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_app/app_constance/strings_manager.dart';
 
-import '../../view_model/cubit/app_cubit.dart';
-import '../../view_model/cubit/app_states.dart';
-import '../../view_model/shared/components/components.dart';
+import '../../../../view_model/cubit/app_cubit.dart';
+import '../../../../view_model/cubit/app_states.dart';
+import '../../../widgets/widgets.dart';
 
 class PrivacyScreen extends StatelessWidget {
   final nameController = TextEditingController();
@@ -32,7 +32,12 @@ class PrivacyScreen extends StatelessWidget {
         ShopCubit cubit = BlocProvider.of(context);
         return Scaffold(
             appBar: AppBar(
-              title:  Center(child: Text(AppStrings.update.tr())),
+              title: Center(
+                child: Text(
+                  AppStrings.update.tr(),
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+              ),
             ),
             body: BlocConsumer<ShopCubit, ShopStates>(
               listener: (context, state) {},
@@ -52,46 +57,48 @@ class PrivacyScreen extends StatelessWidget {
                             SizedBox(
                               height: hSize * 0.03,
                             ),
-                            defaultTextFormField(context: context,
+                            defaultTextFormField(
+                                context: context,
+                                prefix: Icons.person,
                                 type: TextInputType.text,
                                 controller: nameController,
                                 validate: (String? value) {
-                              if (value!.isEmpty) {
-                                nameController.text = model.data!.name!;
-                              }
-                              return;
-                            }, label: AppStrings.nameLabel.tr()),
-                            const SizedBox(
-                              height: 15,
-                            ),
-                            defaultTextFormField(context: context,
+                                  if (value!.isEmpty) {
+                                    nameController.text = model.data!.name!;
+                                  }
+                                  return;
+                                },
+                                label: AppStrings.nameLabel.tr()),
+                            defaultTextFormField(
+                                context: context,
                                 prefix: Icons.phone_android,
                                 type: TextInputType.phone,
                                 controller: phoneController,
                                 validate: (String? value) {
-                              if (value!.isEmpty) {
-                                phoneController.text = model.data!.phone!;
-                              }
-                              return;
-                            }, label: AppStrings.phoneLabel.tr()),
-                            const SizedBox(
-                              height: 15,
-                            ),
-                            defaultTextFormField(context: context,
+                                  if (value!.isEmpty) {
+                                    phoneController.text = model.data!.phone!;
+                                  }
+                                  return;
+                                },
+                                label: AppStrings.phoneLabel.tr()),
+                            defaultTextFormField(
+                                context: context,
                                 prefix: Icons.email,
                                 type: TextInputType.emailAddress,
                                 controller: emailController,
                                 validate: (String? value) {
-                              if (value!.isEmpty) {
-                                emailController.text = model.data!.email!;
-                              }
-                              return null;
-                            }, label: AppStrings.emailLabel.tr(), function: () {}),
+                                  if (value!.isEmpty) {
+                                    emailController.text = model.data!.email!;
+                                  }
+                                  return null;
+                                },
+                                label: AppStrings.emailLabel.tr(),
+                                function: () {}),
                             SizedBox(
                               height: hSize * 0.04,
                             ),
                             defaultElvButton(
-                              context: context,
+                                context: context,
                                 width: wSize * 0.4,
                                 text: AppStrings.update.tr(),
                                 function: () {

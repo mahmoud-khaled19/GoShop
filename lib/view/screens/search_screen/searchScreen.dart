@@ -1,13 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shop_app/app_constance/constants_methods.dart';
 import 'package:shop_app/app_constance/strings_manager.dart';
 
-import '../../view_model/cubit/app_cubit.dart';
-import '../../view_model/cubit/search_cubit/cubit.dart';
-import '../../view_model/cubit/search_cubit/states.dart';
-import '../../view_model/shared/components/components.dart';
-import '../products/products_details/product_details.dart';
+import '../../../view_model/cubit/app_cubit.dart';
+import '../../../view_model/cubit/search_cubit/cubit.dart';
+import '../../../view_model/cubit/search_cubit/states.dart';
+import '../../widgets/widgets.dart';
+import '../home/products/products_details/product_details.dart';
 
 class SearchScreen extends StatelessWidget {
   final searchController = TextEditingController();
@@ -58,7 +59,7 @@ class SearchScreen extends StatelessWidget {
                                 child: Expanded(
                                   child: GestureDetector(
                                     onTap: () {
-                                      navigateTo(
+                                      AppMethods.navigateTo(
                                           context,
                                           ProductDetails(
                                               image: cubit.model!.data!
@@ -116,11 +117,7 @@ class SearchScreen extends StatelessWidget {
                                             ),
                                           ),
                                           const Spacer(),
-                                          IconButton(
-                                            onPressed: () {},
-                                            icon: CircleAvatar(
-                                              backgroundColor: Colors.grey[200],
-                                              child: Icon(
+                                             Icon(
                                                 ShopCubit.get(context)
                                                             .favourites[
                                                         cubit.model!.data!
@@ -132,8 +129,7 @@ class SearchScreen extends StatelessWidget {
                                                         .size
                                                         .width *
                                                     0.06,
-                                              ),
-                                            ),
+
                                           )
                                         ],
                                       ),

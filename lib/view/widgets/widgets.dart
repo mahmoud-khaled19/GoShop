@@ -3,16 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shop_app/app_constance/strings_manager.dart';
 
-import '../../cubit/app_cubit.dart';
+import '../../view_model/cubit/app_cubit.dart';
 
-void navigateAndFinish(context, widget) {
-  Navigator.pushAndRemoveUntil(context,
-      MaterialPageRoute(builder: (context) => widget), (route) => false);
-}
-
-void navigateTo(context, widget) {
-  Navigator.push(context, MaterialPageRoute(builder: (context) => widget));
-}
 
 Widget defaultTextFormField({
   required TextEditingController controller,
@@ -175,26 +167,27 @@ Widget productListItem(context, model) => Container(
       ),
     );
 
-Widget settingItem({
+Widget listTileWidget({
   context,
   required String text,
   Function()? function,
   IconData? icon,
 }) =>
-    Container(
-      color: Theme.of(context).cardColor,
-      margin: const EdgeInsets.symmetric(horizontal: 10),
-      child: ListTile(
-        style: ListTileStyle.list,
-        title: Text(
-          text,
-          style: Theme.of(context).textTheme.titleMedium,
+    GestureDetector(
+      onTap: function,
+      child: Container(
+        color: Theme.of(context).cardColor,
+        margin: const EdgeInsets.symmetric(horizontal: 10),
+        child: ListTile(
+          style: ListTileStyle.list,
+          title: Text(
+            text,
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          trailing: Icon(
+                icon,
+                color: Theme.of(context).splashColor,
+              )
         ),
-        trailing: IconButton(
-            onPressed: function,
-            icon: Icon(
-              icon,
-              color: Theme.of(context).splashColor,
-            )),
       ),
     );
