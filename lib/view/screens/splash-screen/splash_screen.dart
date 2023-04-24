@@ -10,8 +10,10 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double size = MediaQuery.of(context).size.height;
+
     return AnimatedSplashScreen(
-      splashIconSize: MediaQuery.of(context).size.height * .5,
+      splashIconSize: size * .5,
       duration: 3000,
       splashTransition: SplashTransition.fadeTransition,
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -20,10 +22,13 @@ class SplashScreen extends StatelessWidget {
       const ShopLayout() : ShopAppLoginScreen(),
       splash: Column(
         children: [
+          SizedBox(
+            height: size *.02,
+          ),
           const Center(
             child:Icon(Icons.shopify_outlined,size: 100)),
-          const SizedBox(
-            height: 25,
+           SizedBox(
+            height: size *.01,
           ),
           Text(
             AppStrings.appTitle.tr(),

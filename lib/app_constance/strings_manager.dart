@@ -33,6 +33,9 @@ class AppStrings {
   static const String inYourBag = "bagged_already";
   static const String noCarts = 'No Items Bagged Yet!';
 
+  static const String searchScreen = 'Start Searching 🧐 ';
+  static const String searchScreen2 = "Oops ! Data Not Found" ;
+
 
 //مراجعه كل القيم من الاول واعمل بادينج علشان العربي بيضرب
 }

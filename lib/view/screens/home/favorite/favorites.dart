@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../app_constance/constants_methods.dart';
 import '../../../../app_constance/strings_manager.dart';
+import '../../../../generated/assets.dart';
 import '../../../../view_model/cubit/app_cubit.dart';
 import '../../../../view_model/cubit/app_states.dart';
 import '../../../widgets/widgets.dart';
@@ -15,14 +16,16 @@ class FavoritesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double size = MediaQuery.of(context).size.height;
+
     return BlocConsumer<ShopCubit, ShopStates>(
       listener: (context, state) {},
       builder: (context, state) {
         ShopCubit cubit = BlocProvider.of(context);
         return ConditionalBuilder(
-            condition: state is! ShopGetFavoritesLoadingState,
+            condition: cubit.favModel?.data?.data.length !=null,
             builder: (BuildContext context) {
-              return cubit.carts.values.contains(true)
+              return cubit.favourites.values.contains(true)
                   ? Container(
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
@@ -41,10 +44,23 @@ class FavoritesScreen extends StatelessWidget {
                       ),
                     )
                   : Center(
-                      child: Text(
-                      AppStrings.noFav.tr(),
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ));
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: size*0.15,
+                          ),
+                          const Image(
+                            image: AssetImage(Assets.imagesNoNews),
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          Text(
+                            AppStrings.noFav.tr(),
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
+                        ],
+                      ));
             },
             fallback: (BuildContext context) => const Center(
                   child: CircularProgressIndicator(),

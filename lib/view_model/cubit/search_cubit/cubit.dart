@@ -10,7 +10,9 @@ class SearchCubit extends Cubit<SearchStates>{
   SearchCubit():super(InitialSearchState());
  static SearchCubit get(context) => BlocProvider.of(context);
  SearchModel? model;
- void getSearch({
+  List<SearchModel> searchList = [];
+
+  void getSearch({
   required String text
 }){
    emit(LoadingSearchState());

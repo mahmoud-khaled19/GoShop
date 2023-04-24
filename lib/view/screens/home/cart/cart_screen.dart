@@ -2,6 +2,7 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shop_app/generated/assets.dart';
 import '../../../../app_constance/constants_methods.dart';
 import '../../../../app_constance/strings_manager.dart';
 import '../../../../view_model/cubit/app_cubit.dart';
@@ -14,6 +15,7 @@ class CartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double size = MediaQuery.of(context).size.height;
 
     return BlocConsumer<ShopCubit, ShopStates>(
       listener: (context, state) {},
@@ -21,7 +23,7 @@ class CartScreen extends StatelessWidget {
         ShopCubit cubit = BlocProvider.of(context);
         print(cubit.carts);
         return ConditionalBuilder(
-            condition: state is ! ShopGetCartsLoadingState,
+            condition:  cubit.cartModel?.data?.cartItems?.length !=null,
             builder: (BuildContext context) {
               return cubit.carts.values.contains(true)
                   ? Container(
@@ -42,9 +44,22 @@ class CartScreen extends StatelessWidget {
                 ),
               )
                   : Center(
-                  child: Text(
-                    AppStrings.noCarts.tr(),
-                    style: Theme.of(context).textTheme.titleLarge,
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: size*0.15,
+                      ),
+                      const Image(
+                        image: AssetImage(Assets.imagesNoNews),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Text(
+                        AppStrings.noCarts.tr(),
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                    ],
                   ));
             },
             fallback: (BuildContext context) => const Center(

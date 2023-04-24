@@ -101,10 +101,11 @@ class ShopCubit extends Cubit<ShopStates> {
             token: AppMethods.token)
         .then((value) {
       favModel = FavoritesModel.fromJson(value.data);
+      getFavoritesItems();
       if (favModel?.status != null) {
         favourites[productId] != favourites[productId];
       }
-      getFavoritesItems();
+
       emit(ShopChangeFavoritesSuccessState());
     }).catchError((error) {
       if (favModel?.status != null) {
@@ -187,7 +188,7 @@ class ShopCubit extends Cubit<ShopStates> {
       if (catModel?.status == false) {
         carts[productId] = !carts[productId]!;
       }
-
+      getCartsItems();
       emit(ShopChangeCartsSuccessState());
     }).catchError((error) {
       carts[productId] = !carts[productId]!;
@@ -199,20 +200,7 @@ class ShopCubit extends Cubit<ShopStates> {
     } else {
       defaultToast(text: 'تم حذف المنتج من الشنطه ', color: Colors.yellow);
     }
-    getCartsItems();
-  }
 
-  Future<List<FavoritesModel>> testFavItems() async {
-    emit(ShopGetFavoritesLoadingState());
-    testList = await DioHelper.getData(
-            url: ApiConstance.favorites, token: AppMethods.token)
-        .then((value) {
-      favModel = FavoritesModel.fromJson(value.data);
-
-      emit(ShopChangeFavoritesSuccessState());
-      throw ('');
-    });
-    return testList;
   }
 
   Future<void> getCartsItems() async {
